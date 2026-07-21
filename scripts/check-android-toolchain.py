@@ -51,10 +51,11 @@ emulator_version = subprocess.run(
     text=True,
     check=False,
 )
-if "Android emulator version 36.6.11.0" not in (
-    emulator_version.stdout + emulator_version.stderr
-):
-    errors.append("expected Android emulator 36.6.11.0")
+emulator_output = emulator_version.stdout + emulator_version.stderr
+if emulator_version.returncode != 0:
+    errors.append("Android emulator version probe failed")
+elif not re.search(r"Android emulator version 36\.6\.11(?:\.0)?\b", emulator_output):
+    errors.append("expected Android emulator 36.6.11")
 
 if errors:
     print("Android toolchain check failed:")

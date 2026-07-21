@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PAMPAN-NATIVE-REWRITE I1B — runtime and CI evidence closure</title>
+  <link rel="stylesheet" href="../../assets/docs-style.css">
+</head>
+<body><main><article>
+<!-- DOC-NAV:START --><nav class="doc-nav" aria-label="Documentation"><a href="../../../index.html">Portal</a> · <a href="../../../README.md">README</a> · <a href="../../README.md">Docs guide</a> · <a href="../../reference/system-overview.html">System overview</a> · <a href="../../reference/startup-and-verification.html">Verification</a> · <a href="../../handover/current.html">Current handover</a> · <a href="../../handover/changelog.html">Changelog</a></nav><!-- DOC-NAV:END -->
+<h1>PAMPAN-NATIVE-REWRITE / I1B</h1>
+<p class="meta"><strong>Type:</strong> active approved increment plan · <strong>Authority:</strong> user-approved I1 runtime-evidence closure · <strong>Status:</strong> approved / pending execution · <strong>Executable commit:</strong> <code>e14ddad236b78d20708de71a09a489c98c30dd4f</code> · <strong>Remote state at activation:</strong> local <code>main</code> one commit ahead of <code>origin/main</code>; approved commit not yet pushed · <strong>Updated:</strong> 2026-07-21</p>
+<p class="callout"><strong>Evidence closure only.</strong> I1B may close the larger Android foundation I1 only if an exact executable state passes the actual Android-only GitHub Actions workflow, API 36 emulator boot, connected instrumentation tests, assisted manual TalkBack assessment, and configured same-state verification and review. None of those external or manual outcomes is currently recorded or inferred.</p>
+
+<section id="outcome"><h2>Approved outcome</h2><p>Publish the exact Android foundation executable state with a normal, non-force push; monitor the workflow run created for that state; obtain runtime, connected-test, and manual accessibility evidence for the same executable state; pass configured independent verification and review; and synchronize final evidence into durable documentation. I1B does not add product behavior.</p></section>
+
+<section id="scope"><h2>Scope and authorization</h2><ul>
+<li>Record and preserve <code>e14ddad236b78d20708de71a09a489c98c30dd4f</code> as the initial I1B executable candidate. At activation, local <code>main</code> is clean and one commit ahead of public <code>origin/main</code>; <code>origin/main</code> is <code>0512f84b71f22f2a48eb3ac756ab79d4a8036202</code>.</li>
+<li>Run the redacted public-repository preflight before publication, then normally push the exact candidate to <code>origin/main</code>. Force-push and history rewrite are not authorized.</li>
+<li>Monitor the exact GitHub Actions run for the pushed commit and record public, non-sensitive run/job identifiers and conclusions.</li>
+<li>Require the Android job to prove API 36 AVD creation and completed boot, offline network disablement, and <code>connectedDebugAndroidTest</code> success in addition to the existing static/build/security checks.</li>
+<li>Conduct an assisted manual TalkBack assessment against an install built from the same executable commit. The human result remains pending until explicitly observed and attested.</li>
+<li>Permit narrowly scoped remediation only when evidence identifies a CI-harness, emulator, instrumentation-test, or accessibility-semantic defect within I1. Any executable fix creates a new candidate that must be committed, normally pushed, and rerun through the entire I1B evidence sequence.</li>
+<li>After the exact state passes, run configured <code>implement_verify</code> and <code>implement_review</code> against the same implementation-state identifier, then finalize, commit, and normally push redacted evidence documentation.</li>
+</ul></section>
+
+<section id="sequence"><h2>Required execution sequence</h2><ol>
+<li><strong>Preflight:</strong> confirm the branch/commit relationship, clean executable state, frozen <code>pam_pan/</code>, dormant iOS boundary, docs validity, and redacted repository/history scan. Do not publish if a suspected disclosure appears.</li>
+<li><strong>Publish candidate:</strong> normally push the exact executable candidate to public <code>origin/main</code>; confirm the remote branch resolves to the intended full SHA.</li>
+<li><strong>Observe actual CI:</strong> identify the workflow run whose <code>head_sha</code> equals the candidate; wait for both <code>docs-and-security</code> and <code>android</code> jobs; retain conclusions and decisive redacted evidence.</li>
+<li><strong>Confirm Android runtime gate:</strong> prove the API 36 emulator completed boot and the offline <code>connectedDebugAndroidTest</code> task passed. A queued, cancelled, skipped, timed-out, or wrong-SHA run is not evidence.</li>
+<li><strong>Perform assisted TalkBack gate:</strong> install or launch an artifact built from the same executable state and complete the checklist below with human observation.</li>
+<li><strong>Gate exact state:</strong> create a reproducible implementation-state identifier and obtain explicit PASS from configured independent verification and review for that same state.</li>
+<li><strong>Finalize memory:</strong> record only verified evidence, update I1 status accurately, validate docs, and normally commit/push evidence-only documentation. Do not activate I2.</li>
+</ol></section>
+
+<section id="ci-evidence"><h2>Actual CI evidence record</h2><p>Populate these fields from the exact public run. Until then they remain <strong>pending</strong>.</p>
+<table><thead><tr><th>Field</th><th>Required evidence</th><th>Current value</th></tr></thead><tbody>
+<tr><td>Executable candidate</td><td>Full Git commit SHA and proof <code>origin/main</code> resolves to it</td><td><code>e14ddad236b78d20708de71a09a489c98c30dd4f</code>; remote proof pending</td></tr>
+<tr><td>Workflow run</td><td>Workflow name, run ID/attempt, event, branch, public URL, <code>head_sha</code>, start/completion times, overall conclusion</td><td>Pending</td></tr>
+<tr><td><code>docs-and-security</code></td><td>Job ID/URL and successful conclusion for the exact run</td><td>Pending</td></tr>
+<tr><td><code>android</code></td><td>Job ID/URL and successful conclusion for the exact run</td><td>Pending</td></tr>
+<tr><td>Toolchain</td><td>Pinned JDK 17.0.19, API/SDK 36, Build Tools 36.0.0, emulator and <code>google_apis;x86_64</code> API 36 image assertions</td><td>Pending actual-CI evidence</td></tr>
+<tr><td>Emulator boot</td><td>AVD <code>pampan_ci</code> created and <code>sys.boot_completed=1</code> before timeout</td><td>Pending</td></tr>
+<tr><td>Offline boundary</td><td>Wi-Fi and mobile data disabled before the connected-test task</td><td>Pending</td></tr>
+<tr><td>Connected tests</td><td><code>connectedDebugAndroidTest</code> successful under offline, strict dependency verification</td><td>Pending</td></tr>
+<tr><td>Security/artifact checks</td><td>Redacted full scan, assembled boundary, dependency scan/lock, and debug APK scan successful</td><td>Pending actual-CI evidence</td></tr>
+</tbody></table></section>
+
+<section id="talkback"><h2>Assisted manual TalkBack checklist</h2><p>Record device/emulator model, Android/API level, system build, TalkBack version when available, artifact/source commit, assessor, date, and PASS/FAIL without sensitive data. The assessment must use the same executable candidate as the accepted CI run.</p>
+<ol>
+<li>Install or launch the candidate while network access is unavailable; confirm the deterministic foundation screen opens without account, service, permission, or network prompts.</li>
+<li>Enable TalkBack and launch PamPan from the launcher. Confirm the application can be entered and the screen receives accessibility focus.</li>
+<li>Swipe forward through the screen. Confirm the visible title “PamPan,” status “Native foundation,” and message “Your pantry, thoughtfully managed.” are announced accurately in logical top-to-bottom order, without an unexpected focus trap or empty/unlabeled focus target.</li>
+<li>Swipe backward through the same content. Confirm navigation reverses predictably, focus remains visible, and the user can leave the application using standard system navigation.</li>
+<li>Confirm there are no unlabeled actionable controls, inaccessible required actions, unexpected permission dialogs, or network/service error surfaces. The current foundation screen intentionally has no product controls.</li>
+<li>Record each item as PASS or FAIL plus concise observations. A partial, inferred, screenshot-only, automated semantics-only, or unobserved result does not satisfy the manual gate.</li>
+</ol></section>
+
+<section id="exit-gate"><h2>I1B exit gate</h2><p><strong>PASS only when all evidence refers to one exact executable state:</strong></p><ul>
+<li>the candidate is normally published to <code>origin/main</code> and the exact remote SHA is recorded;</li>
+<li>the exact GitHub Actions run completes successfully, including both workflow jobs and existing Android-only static/build/security/artifact checks;</li>
+<li>the API 36 emulator reaches completed boot and offline <code>connectedDebugAndroidTest</code> passes;</li>
+<li>the full assisted TalkBack checklist passes with human observation on the same executable state;</li>
+<li><code>pam_pan/</code> remains unchanged from <code>0512f84</code>, iOS remains dormant and untouched, public-repository scans remain redacted/PASS, and I2–I9 remain inactive;</li>
+<li>configured <code>implement_verify</code> and <code>implement_review</code> each return explicit PASS for the same implementation-state identifier; and</li>
+<li>final documentation validation and <code>git diff --check</code> pass without a post-gate behavior-affecting change.</li>
+</ul><p>Only then may the larger <code>PAMPAN-NATIVE-REWRITE</code> / I1 be recorded complete / PASS. I1A retains its separate completed result regardless of I1B outcome.</p></section>
+
+<section id="exclusions"><h2>Exclusions</h2><p>No product behavior, Supabase initialization, schema, contract activation, authentication, signing/provisioning, runtime permission, migration, dependency upgrade, release work, iOS implementation/build/test/verification, history rewrite, or <code>pam_pan/</code> change. I2–I9 remain inactive and require fresh approval.</p></section>
+
+<section id="remediation"><h2>Narrow-remediation boundary</h2><p>Remediation may touch only the smallest CI/emulator/test harness or Android accessibility semantics necessary to resolve observed I1B evidence failure. It must not introduce product functionality or broaden architecture. Any behavior-affecting or executable configuration change invalidates earlier CI, runtime, TalkBack, verification, and review results; create a new commit/state and restart every I1B gate. A fix requiring a dependency/toolchain upgrade, new permission, service/network behavior, signing material, iOS work, legacy change, or broader UI redesign requires fresh approval.</p></section>
+
+<section id="stop-conditions"><h2>Stop conditions</h2><ul>
+<li>A suspected secret, credential, private endpoint, signing material, sensitive user data, or unredacted disclosure: stop publication and CI where practical, escalate privately, rotate/revoke externally, and re-verify with redacted evidence.</li>
+<li>The remote SHA or workflow <code>head_sha</code> does not equal the candidate, the relevant run cannot be identified, or a required job is skipped/cancelled/fails: do not infer PASS.</li>
+<li>Emulator boot, offline boundary, connected tests, or any manual TalkBack checklist item fails or cannot be observed: keep I1B and larger I1 BLOCKED pending narrow remediation or the missing human/external evidence.</li>
+<li>A requested fix crosses the remediation boundary or would activate I2–I9, iOS, services, signing, migration, or product behavior: stop for fresh approval.</li>
+</ul></section>
+</article></main></body></html>
