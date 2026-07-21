@@ -57,6 +57,12 @@ jobs:
           yes | sdkmanager --licenses > /dev/null
           sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0" "emulator" "system-images;android-36;google_apis;x86_64"
           python3 ../../scripts/check-android-toolchain.py
+      - name: Enable KVM access for the Android emulator
+        run: |
+          test -e /dev/kvm
+          sudo chmod 0666 /dev/kvm
+          test -r /dev/kvm
+          test -w /dev/kvm
       - run: ./gradlew --no-daemon --dependency-verification strict ktlintCheck lintDebug testDebugUnitTest assembleDebug :app:writeReleaseRuntimeLock
       - run: git diff --exit-code -- app/runtime-dependencies/gradle.lockfile
       - run: python3 ../../scripts/check-native-foundation.py --require-assembled-android
