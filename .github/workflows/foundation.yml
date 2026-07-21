@@ -70,8 +70,14 @@ jobs:
       - name: Launch offline emulator and run UI tests
         run: |
           echo no | avdmanager create avd --force --name pampan_ci --package "system-images;android-36;google_apis;x86_64" --device pixel_6
+          emulator -accel-check
           nohup emulator -avd pampan_ci -no-window -no-audio -no-boot-anim -gpu software -no-snapshot > "$RUNNER_TEMP/emulator.log" 2>&1 &
           emulator_pid=$!
+          report_emulator_failure() {
+            grep -Eai 'error|warning|fatal|panic|fail|cannot|could not|kvm|accel' "$RUNNER_TEMP/emulator.log" \
+              | sed -E 's#(/home/runner/work/)[^ ]+#\1[redacted]#g' \
+              | tail -n 80 || true
+          }
           cleanup() {
             adb emu kill > /dev/null 2>&1 || true
             kill "$emulator_pid" > /dev/null 2>&1 || true
@@ -88,10 +94,12 @@ jobs:
             else
               echo "Emulator exited before registering with adb."
             fi
+            report_emulator_failure
             exit 1
           fi
           if ! timeout 300 bash -c 'until [ "$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d "\r")" = "1" ]; do sleep 5; done'; then
             echo "Emulator registered with adb but did not complete boot within 300 seconds."
+            report_emulator_failure
             exit 1
           fi
           adb shell svc wifi disable
