@@ -1,0 +1,72 @@
+name: Android foundation
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  docs-and-security:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - run: git cat-file -e 0512f84^{commit}
+      - run: python3 scripts/check-docs.py
+      - run: python3 scripts/check-native-foundation.py
+      - run: python3 scripts/check-secrets.py
+      - name: Scan maintained dependency manifests for known vulnerabilities
+        run: |
+          curl -fL "https://github.com/google/osv-scanner/releases/download/v2.4.0/osv-scanner_linux_amd64" -o "$RUNNER_TEMP/osv-scanner"
+          echo "15314940c10d26af9c6649f150b8a47c1262e8fc7e17b1d1029b0e479e8ed8a0  $RUNNER_TEMP/osv-scanner" | sha256sum -c -
+          chmod +x "$RUNNER_TEMP/osv-scanner"
+          "$RUNNER_TEMP/osv-scanner" scan source --lockfile apps/android/app/runtime-dependencies/gradle.lockfile
+      - run: git diff --exit-code 0512f84 -- pam_pan
+      - run: git diff --check
+
+  android:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: apps/android
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Install pinned JDK and Android command-line tools
+        run: |
+          curl -fL "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.19%2B10/OpenJDK17U-jdk_x64_linux_hotspot_17.0.19_10.tar.gz" -o "$RUNNER_TEMP/temurin17.tar.gz"
+          echo "d8afc263758141a66e0e3aafc321e783f7016696f4eaea067d340a269037d331  $RUNNER_TEMP/temurin17.tar.gz" | sha256sum -c -
+          mkdir -p "$RUNNER_TEMP/temurin17"
+          tar -xzf "$RUNNER_TEMP/temurin17.tar.gz" -C "$RUNNER_TEMP/temurin17" --strip-components=1
+          curl -fL "https://dl.google.com/android/repository/commandlinetools-linux-13114758_latest.zip" -o "$RUNNER_TEMP/android-cli.zip"
+          echo "7ec965280a073311c339e571cd5de778b9975026cfcbe79f2b1cdcb1e15317ee  $RUNNER_TEMP/android-cli.zip" | sha256sum -c -
+          mkdir -p "$RUNNER_TEMP/android-sdk/cmdline-tools" "$RUNNER_TEMP/android-cli"
+          unzip -q "$RUNNER_TEMP/android-cli.zip" -d "$RUNNER_TEMP/android-cli"
+          mv "$RUNNER_TEMP/android-cli/cmdline-tools" "$RUNNER_TEMP/android-sdk/cmdline-tools/latest"
+          echo "JAVA_HOME=$RUNNER_TEMP/temurin17" >> "$GITHUB_ENV"
+          echo "ANDROID_HOME=$RUNNER_TEMP/android-sdk" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$RUNNER_TEMP/android-sdk" >> "$GITHUB_ENV"
+          echo "$RUNNER_TEMP/temurin17/bin" >> "$GITHUB_PATH"
+          echo "$RUNNER_TEMP/android-sdk/cmdline-tools/latest/bin" >> "$GITHUB_PATH"
+          echo "$RUNNER_TEMP/android-sdk/platform-tools" >> "$GITHUB_PATH"
+          echo "$RUNNER_TEMP/android-sdk/emulator" >> "$GITHUB_PATH"
+      - name: Install and assert pinned Android packages
+        run: |
+          yes | sdkmanager --licenses > /dev/null
+          sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0" "emulator" "system-images;android-36;google_apis;x86_64"
+          python3 ../../scripts/check-android-toolchain.py
+      - run: ./gradlew --no-daemon --dependency-verification strict ktlintCheck lintDebug testDebugUnitTest assembleDebug :app:writeReleaseRuntimeLock
+      - run: git diff --exit-code -- app/runtime-dependencies/gradle.lockfile
+      - run: python3 ../../scripts/check-native-foundation.py --require-assembled-android
+      - run: python3 ../../scripts/check-secrets.py --artifact-only --artifact app/build/outputs/apk/debug/app-debug.apk
+      - name: Launch offline emulator and run UI tests
+        run: |
+          echo no | avdmanager create avd --force --name pampan_ci --package "system-images;android-36;google_apis;x86_64" --device pixel_6
+          nohup emulator -avd pampan_ci -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect -no-snapshot > "$RUNNER_TEMP/emulator.log" 2>&1 &
+          adb wait-for-device
+          timeout 300 bash -c 'until [ "$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d "\r")" = "1" ]; do sleep 5; done'
+          adb shell svc wifi disable
+          adb shell svc data disable
+          ./gradlew --offline --no-daemon --dependency-verification strict connectedDebugAndroidTest

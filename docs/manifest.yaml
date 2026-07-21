@@ -1,0 +1,55 @@
+documentation:
+  version: 1
+  project: PamPan
+  portal: index.html
+  guide: docs/README.md
+  current_handover: docs/handover/current.html
+  changelog: docs/handover/changelog.html
+  navigation_command: python3 scripts/update-doc-navigation.py
+  validation_command: python3 scripts/check-docs.py
+  active_documents:
+    - docs/reference/system-overview.html
+    - docs/reference/glossary.html
+    - docs/reference/startup-and-verification.html
+    - docs/reference/public-repository-security.html
+    - docs/handover/current.html
+    - docs/handover/changelog.html
+    - docs/planning/active/pampan-native-rewrite.html
+    - docs/planning/active/pampan-native-rewrite-roadmap.html
+  completed_documents:
+    - docs/planning/completed/pampan-rewrite-spec.html
+    - docs/planning/completed/pampan-rewrite-spec-i1-roadmap.html
+    - docs/planning/completed/pampan-native-rewrite-i1a.html
+work:
+  primary: PAMPAN-NATIVE-REWRITE
+  active:
+    - id: PAMPAN-NATIVE-REWRITE
+      title: Android native rewrite
+      status: "I1A complete / PASS; larger Android foundation I1 BLOCKED pending runtime, accessibility, and actual CI evidence"
+      spec: docs/planning/active/pampan-native-rewrite.html
+      roadmap: docs/planning/active/pampan-native-rewrite-roadmap.html
+      increment: I1
+      increment_status: "implemented and review-remediated; I1A complete / PASS; BLOCKED pending Android emulator launch, connected tests, TalkBack, and actual GitHub Actions evidence"
+      base_commit: 0512f84
+      last_verified_commit: null
+      evidence: "I1A complete / PASS for I1A@0512f84/worktree-2d120810/index-e3b0c442/untracked-37221eae: configured implement_verify PASS and implement_review PASS on the same state. Android-only CI/validators; redacted scanner self-test, full repository/index/history/ref scan, generated APK scan, strict offline ktlint/lint/unit/assemble/release-lock, assembled boundary, docs/diff/legacy/dependency-lock checks all PASS. Protected iOS and Android app-source hashes were unchanged; gates edited no tracked files."
+      blocker: "The larger I1 remains BLOCKED / pending verification: no successful offline emulator launch, connected tests, manual TalkBack/accessibility result, or actual GitHub Actions run is recorded. I2-I9 are inactive and require fresh approval."
+      relevant_paths: "SECURITY.md; docs/reference/public-repository-security.html; apps/android/ (only active native application); apps/ios/ (preserved dormant, no active gate); supabase/ and contracts/ (reserved only); .github/workflows/foundation.yml; scripts/check-native-foundation.py; scripts/check-secrets.py; pam_pan/ (must remain unchanged from 0512f84)"
+      standing_constraint: "Public repository: no secrets or sensitive data in source, docs, tests, fixtures, examples, CI configuration/output, artifacts, signing material, local configuration intended for commit, or Git history. Audit and report only redacted evidence."
+      last_completed_increment: I1A
+      last_verified_state: I1A@0512f84/worktree-2d120810/index-e3b0c442/untracked-37221eae
+      completed_record: docs/planning/completed/pampan-native-rewrite-i1a.html
+  completed:
+    - id: PAMPAN-REWRITE-SPEC
+      title: Repository reverse-engineering and rewrite specification
+      status: "I1 complete — static-analysis exit gate PASS"
+      spec: docs/planning/completed/pampan-rewrite-spec.html
+      roadmap: docs/planning/completed/pampan-rewrite-spec-i1-roadmap.html
+      increment: I1
+      increment_status: "complete — static-analysis exit gate PASS"
+      base_commit: 0512f84
+      initial_working_tree: clean at legacy base; documentation bootstrap remains uncommitted
+      last_verified_commit: null
+      evidence: "docs/planning/completed/pampan-rewrite-spec.html (PASS: static analysis; 48 first-party Dart files; 44 exact direct-dependency entries; 17 FR/NFR entries; 13 disposition traces; 30 explicit blockers; docs validator and git diff --check passed)"
+      verification_gaps: Flutter command not found; flutter analyze/test, platform builds, and live integrations not run.
+      next_proposed_increment: Product/architecture decision resolution and controlled runtime verification; fresh approval required before activation or rewrite implementation.

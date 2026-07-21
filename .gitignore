@@ -1,1 +1,50 @@
 .vscode/launch.json
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+**/Secrets.xcconfig
+**/local.properties
+**/keystore.properties
+**/signing.properties
+**/key.properties
+*.jks
+*.keystore
+*.p12
+*.pem
+*.key
+*.pk8
+*.mobileprovision
+service-account*.json
+firebase-adminsdk-*.json
+apps/android/**/google-services.json
+apps/android/**/agconnect-services.json
+/.credentials/
+/.secrets/
+
+# macOS / Xcode
+.DS_Store
+DerivedData/
+*.xcuserstate
+xcuserdata/
+apps/ios/build/
+
+# Android / Gradle
+.gradle/
+**/.gradle/
+apps/android/build/
+apps/android/app/build/
+
+# Local Supabase state
+supabase/.branches/
+supabase/.temp/
+supabase/.env
+
+# Tool output
+.idea/
+coverage/
+reports/
+security-reports/
+secret-scan*.json
+gitleaks-report.*

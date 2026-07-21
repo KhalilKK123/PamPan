@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PAMPAN-NATIVE-REWRITE — living architecture specification</title>
+  <link rel="stylesheet" href="../../assets/docs-style.css">
+</head>
+<body><main><article>
+<!-- DOC-NAV:START --><nav class="doc-nav" aria-label="Documentation"><a href="../../../index.html">Portal</a> · <a href="../../../README.md">README</a> · <a href="../../README.md">Docs guide</a> · <a href="../../reference/system-overview.html">System overview</a> · <a href="../../reference/startup-and-verification.html">Verification</a> · <a href="../../handover/current.html">Current handover</a> · <a href="../../handover/changelog.html">Changelog</a></nav><!-- DOC-NAV:END -->
+<h1>PAMPAN-NATIVE-REWRITE</h1>
+<p class="meta"><strong>Type:</strong> living approved architecture specification · <strong>Authority:</strong> user-approved rewrite direction plus verified I1A implementation · <strong>Feature:</strong> PAMPAN-NATIVE-REWRITE · <strong>Status:</strong> I1A complete / PASS; larger I1 BLOCKED / pending verification · <strong>Legacy base:</strong> <code>0512f84</code> · <strong>Updated:</strong> 2026-07-21</p>
+<p class="callout"><strong>Mixed current and planned authority.</strong> I1A verified Android as the only active native application and preserved iOS as dormant outside implementation, build, test, CI, verification, and release gates. The larger I1 is still BLOCKED pending emulator, connected-test, TalkBack, and actual GitHub Actions evidence. Product, Supabase, schema, authentication, and later-increment content remains planning, not current behavior.</p>
+
+<section id="decision-record"><h2>Approved decision record</h2>
+<table><thead><tr><th>Area</th><th>Approved decision</th></tr></thead><tbody>
+<tr><td>Native application scope</td><td>Develop and verify only the Android Kotlin/Jetpack Compose application. Preserve <code>apps/ios/</code> unchanged as dormant historical foundation work; do not implement, build, test, verify, release, delete, or rewrite it without fresh explicit approval.</td></tr>
+<tr><td>Ordinary data operations</td><td>The Android client uses Supabase Auth, Postgres, Row Level Security (RLS), Storage, and Realtime directly for ordinary authorized operations.</td></tr>
+<tr><td>Server boundary</td><td>Use Supabase Edge Functions only for privileged actions, secrets, billable work, coordination, push, and webhooks. Do not introduce a separate backend unless a measured need justifies it.</td></tr>
+<tr><td>Repository</td><td>Use this public monorepo for Android code and non-executable schemas, contracts, synthetic fixtures, and test vectors. Public-repository safety applies to every path and Git history. Dormant iOS code is not an active contract consumer.</td></tr>
+<tr><td>Platform and identity</td><td>Android API 26+ is the active rewrite floor. The provisional Android application ID is <code>com.pampan.pampan</code>; confirm ownership before store release. The recorded iOS 17+ floor and bundle ID are dormant historical decisions, not active support commitments.</td></tr>
+<tr><td>Authentication and ownership</td><td>Use verified email/password. Ordinary owned rows are authorized by <code>auth.uid()</code>; household sharing is deferred.</td></tr>
+<tr><td>Product defaults</td><td>Initial scope is an individual pantry: authenticated startup, pantry item and category management, dashboard/near-expiry views, and calendar projection. Date, quantity, category, and offline defaults below are approved. Legacy optional surfaces are deferred unless a later approved increment activates them.</td></tr>
+</tbody></table></section>
+
+<section id="product-defaults"><h2>Approved product defaults and exclusions</h2>
+<table><thead><tr><th>Topic</th><th>Approved default</th><th>Boundary</th></tr></thead><tbody>
+<tr><td>Date</td><td>An item expiry is a user-entered calendar date, stored and exchanged as ISO-8601 <code>YYYY-MM-DD</code>; it is not a timestamp. A date is local to the user’s selected device calendar context. “Near expiry” and “expired” use that local date, with no time-of-day conversion.</td><td>Exact near-expiry lead-time presentation is implemented with the product workflow, not inferred from legacy notification code.</td></tr>
+<tr><td>Quantity</td><td>Quantity is a non-negative decimal value plus an explicit unit. Zero is valid; negative values and implicit unit conversion are not.</td><td>No cross-unit conversion or inventory valuation in the initial scope.</td></tr>
+<tr><td>Categories</td><td>Categories are per-user named records with stable IDs. Item/category relationships use IDs, not display names. Deletion requires an explicit product-defined handling of dependent items before the mutation is enabled.</td><td>No global taxonomy, household categories, or legacy dynamic relationship shape.</td></tr>
+<tr><td>Offline</td><td>I1 supplies deterministic offline foundation screens only. Later client work is offline-first for locally persisted reads and drafts; writes are not silently queued or claimed successful until an approved sync/conflict design is implemented.</td><td>No cloud dependence, Supabase SDK, or mutation sync in I1.</td></tr>
+</tbody></table>
+<h3>Deferred or excluded from initial scope</h3>
+<p>Households/sharing, onboarding/profile expansion, reminders, barcode lookup, camera or AI extraction, recipes, maps/shelters, donations/payments, records/leaderboards/XP, widgets, and all legacy Appwrite/Firebase integrations are not I1 work and are not initial product commitments. A later increment must explicitly approve each retained capability, its privacy and provider boundary, and its verification gate. Payment card/CVC collection is excluded.</p></section>
+
+<section id="target-architecture"><h2>Target architecture</h2>
+<pre><code>Android app (Compose) ── Supabase client APIs ──┬─ Postgres + RLS
+                                                ├─ Auth / Storage / Realtime
+                                                └─ Edge Functions (narrow only)
+
+non-executable assets: schemas | API/RLS contracts | synthetic fixtures | test vectors
+dormant preserved code: apps/ios/ (no active implementation or gate)</code></pre>
+<ul>
+<li>The Android application owns its UI, navigation, local persistence, state, domain mapping, accessibility behavior, and platform tests. Contracts are proven with Android tests over synthetic fixtures and test vectors, not a shared runtime layer.</li>
+<li>Direct client access is limited to authenticated, RLS-authorized ordinary operations. Policies are part of the contract and must be tested with at least two principals.</li>
+<li>Functions receive only the smallest necessary inputs, authenticate/authorize independently, validate schema, provide idempotency where applicable, and return typed public errors. They are mandatory for secrets, privileged cross-user work, billable providers, coordination, push dispatch, and webhooks.</li>
+<li>Introduce a separate backend only after measured latency, reliability, security, operational, or coordination evidence shows that Supabase primitives and narrow functions are insufficient; record the evidence and obtain approval.</li>
+</ul>
+<h3>Monorepo target layout</h3>
+<pre><code>apps/android/        active Kotlin/Jetpack Compose application and Gradle project
+apps/ios/            preserved dormant SwiftUI/Xcode foundation; no active gate
+supabase/            migrations, RLS policies, functions, local configuration
+contracts/           versioned schemas, API/RLS contract notes, fixtures, test vectors
+ci/                  reusable CI definitions or scripts
+docs/                planning, current-state reference, handover, evidence
+pam_pan/             unchanged legacy Flutter package during the rewrite</code></pre>
+<p>The historical foundation created both native projects. Completed I1A preserved those files while making only <code>apps/android/</code> active and removing iOS from active implementation and gates. <code>supabase/</code> and <code>contracts/</code> remain reserved with documentation/placeholders only. I1A created no cloud configuration, schema, client SDK use, service behavior, or product functionality.</p></section>
+
+<section id="security-privacy"><h2>Security, privacy, and data design</h2>
+<ul>
+<li>This repository is public. Treat source, documentation, tests, fixtures, examples, Git history, CI configuration/output, caches, generated/release artifacts, screenshots, local configuration intended for commit, and signing material as potentially public and permanent. Follow <a href="../../reference/public-repository-security.html">the public-repository security boundary</a>.</li>
+<li>No secrets in source, fixtures, logs, CI output, generated app bundles, or documentation. Client configuration contains only publishable values; service-role keys and third-party credentials remain server-side secret material.</li>
+<li>Use environment-specific configuration with explicit development/staging/production separation, checked-in redacted templates, and CI secret scanning. Never carry legacy credentials/configuration into the rewrite.</li>
+<li>RLS is deny-by-default. User-owned rows carry an owner identifier constrained to <code>auth.uid()</code>; the client cannot choose another owner. Storage paths and policies follow the same ownership rule. Realtime exposure is restricted by RLS and tested.</li>
+<li>Minimize collected pantry data. Do not activate camera, AI, location, barcode, push, or payment collection without an approved purpose, disclosure/consent behavior where applicable, retention/deletion policy, provider review, and tests.</li>
+<li>Define schema validation, canonical wire dates/quantities/IDs, migration reversibility or recovery, audit-safe error handling, and redacted observability before production data is accepted.</li>
+</ul>
+<h3>Migration posture</h3>
+<p>Do not migrate legacy Appwrite, SQLite, Firebase, or device data by assumption. First establish lawful ownership, source schema, data quality, consent, and rollback/recovery evidence. A migration increment must include mapping, dry-run, duplicate/malformed-record handling, reconciliation, rollback or compensating action, and user communication. I1 changes neither legacy data nor <code>pam_pan/</code>.</p></section>
+
+<section id="delivery"><h2>Delivery, CI, and release design</h2>
+<ul>
+<li>Pin JDK/Gradle/Android SDK toolchains in repository-visible configuration and CI. Record exact versions and commands with every increment gate. Do not select or assert Xcode/iOS toolchains in active CI.</li>
+<li>CI builds and tests Android, runs Android contract/fixture checks, formatting/lint/static analysis, dependency and redacted secret scanning, documentation validation, and <code>git diff --check</code>. Cloud-dependent checks are explicit and isolated from offline foundation gates.</li>
+<li>Release delivery uses the Android signing/distribution path only. Signing credentials and store credentials are never committed, printed, or embedded in public artifacts. Release promotion requires reproducible signed artifacts, provenance, test evidence, privacy/release notes, and rollback instructions.</li>
+<li>Version contracts and migrations deliberately. Compatibility, rollback, incident ownership, telemetry privacy, retention, and alert thresholds must be established before production release.</li>
+</ul></section>
+
+<section id="i1-scope"><h2>I1 — Android native workspace and secure delivery foundation</h2>
+<p><strong>Status:</strong> implemented and accepted-review-remediated; I1A transition complete / PASS; larger I1 BLOCKED / pending verification, not complete or PASS. The old dual-platform gate was superseded without being retroactively passed.</p>
+<h3>In scope</h3><ul><li>Empty buildable SwiftUI and Jetpack Compose applications with the approved IDs and OS floors.</li><li>Deterministic offline foundation screens that launch without services, accounts, network, or secrets.</li><li>Basic platform tests for those offline states; pinned toolchain/configuration conventions; reserved <code>supabase/</code> and <code>contracts/</code> boundaries; CI/security/documentation checks.</li><li>Recorded exact toolchain versions, simulator/emulator device images, launch commands, and CI commands/results.</li></ul>
+<h3>Explicit non-goals</h3><ul><li>No Supabase SDK, cloud project, schema, migration, RLS policy, Auth, Storage, Realtime, Edge Function, or product data functionality.</li><li>No runtime permissions, secrets, signing/provisioning, push, network calls, telemetry, or service configuration.</li><li>No legacy behavior, data, configuration, dependency, or source changes: <code>pam_pan/</code> remains unchanged from <code>0512f84</code>.</li><li>No decision reopening for deferred features or separate backend.</li></ul>
+<h3>Current I1 exit gate</h3>
+<p>I1 now gates Android only. Static/build/security evidence is accepted through completed I1A, but PASS still requires a successful offline Android emulator launch, connected instrumentation tests, manual TalkBack/accessibility evidence, and an actual GitHub Actions run. Missing runtime or external CI evidence is <strong>BLOCKED</strong>, not passed by inference.</p></section>
+
+<section id="i1a-scope"><h2>I1A — Android-only scope and public-repository safety transition</h2>
+<p><strong>Status:</strong> implemented, independently verified and reviewed, complete / PASS for <code>I1A@0512f84/worktree-2d120810/index-e3b0c442/untracked-37221eae</code>. See the <a href="../completed/pampan-native-rewrite-i1a.html">completed execution record</a>.</p>
+<h3>In scope</h3><ul><li>Make Android the only active native application across CI, validators, documentation, verification, and future release planning.</li><li>Preserve <code>apps/ios/</code> as dormant; remove it from active toolchain, build, test, launch, accessibility, CI, and release gates without deleting or rewriting its history.</li><li>Establish the standing public-repository policy across source, docs, tests, fixtures, examples, CI configuration/output, local configuration, signing material, generated/release artifacts, and Git history.</li><li>Strengthen redacted scanning and regression coverage across the working tree, frozen <code>pam_pan/</code>, dormant iOS, Git history, CI surfaces, and Android artifacts. Review exclusions and allowlists explicitly.</li><li>Keep <code>pam_pan/</code> unchanged from <code>0512f84</code>; keep <code>supabase/</code> and <code>contracts/</code> reserved-only.</li></ul>
+<h3>Explicit non-goals</h3><ul><li>No iOS implementation, deletion, history rewrite, build, test, CI, verification, or release work.</li><li>No I2 activation, Supabase initialization, product behavior, service contract, runtime permission, signing setup, migration, or legacy modification.</li><li>No copying or documenting suspected values. No credential classification beyond redacted evidence. Credential revocation/rotation, provider cleanup, remote artifact removal, or history rewrite requires private coordination and separate authorization.</li></ul>
+<h3>I1A exit gate</h3><p><strong>PASS only when the exact implementation state has:</strong> Android lint, unit-test, and debug-assembly checks passing under the pinned toolchain; active CI and native-foundation validation containing no iOS build/test/toolchain gate; Android source and assembled-permission/service audits passing; redacted regression-tested review covering the working tree, frozen legacy, dormant iOS, Git history, CI surfaces, and generated Android artifacts; <code>pam_pan/</code> unchanged from <code>0512f84</code>; documentation validation and <code>git diff --check</code> passing; and independent verification and review passing the same state. Any suspected credential disclosure blocks completion pending private revocation or rotation and redacted re-verification.</p>
+<p><strong>Result:</strong> PASS. Android-only CI/validators, public-repository scanning, scanner regression coverage, APK scanning, pinned Build Tools 36.0.0, strict offline Android checks, assembled-boundary checks, legacy/diff/docs/dependency-lock invariants, and unchanged protected app-source hashes passed independent verification and review on the exact state. I1A completion does not complete Android foundation runtime verification; I1 remains BLOCKED until offline emulator launch, connected tests, manual TalkBack, and an actual CI run are evidenced.</p></section>
+
+<section id="i1-implementation-and-remediation"><h2>Implemented foundation, I1A transition, and evidence</h2>
+<p>The repository retains separate historical foundations under <code>apps/ios/</code> and <code>apps/android/</code>, but active CI and validation now target Android only. The iOS executable remains unchanged and dormant. Android pins JDK 17.0.19, Gradle 8.11.1, Android Gradle Plugin 8.10.1, Kotlin 2.1.21, SDK/API 36, and Build Tools 36.0.0; CI builds, performs static/unit checks, validates the release-runtime dependency lock, audits the assembled boundary, scans the generated APK, and retains an offline emulator/connected-test job for the remaining larger-I1 gate.</p>
+<p>The redacted public-repository scanner covers publishable working-tree paths/content, every staged index path/blob, reachable Git blob/commit/tag/tree objects, Git ref names, and requested APK path/archive/entry metadata and content. Synthetic self-tests include staged-only, commit, annotated-tag, ref-name, archive-metadata, classification, and redacted-output fixtures. Exact user-confirmed placeholders and publishable legacy Google client configuration are classified separately by exact-value digest; values are never emitted.</p>
+<p><strong>Accepted I1A state:</strong> <code>I1A@0512f84/worktree-2d120810/index-e3b0c442/untracked-37221eae</code>. Configured independent verification and review both returned PASS. Scanner self-test, full scan, APK scan, strict offline ktlint/lint/unit/assemble/release-lock, assembled boundary, documentation, diff, frozen-legacy, and dependency-lock checks passed. Protected iOS and Android application-source hashes remained unchanged and the gates edited no tracked file.</p>
+<p><strong>Remaining I1 blocker:</strong> no successful emulator launch, connected-test result, manual TalkBack/accessibility result, or actual GitHub Actions run is recorded. The larger I1 remains BLOCKED / pending verification.</p></section>
+
+<section id="evidence-and-authority"><h2>Evidence and authority boundaries</h2>
+<p>The completed <a href="../completed/pampan-rewrite-spec.html">PAMPAN-REWRITE-SPEC evidence record</a> remains the authority for observed legacy behavior and risks. The <a href="../completed/pampan-native-rewrite-i1a.html">I1A execution record</a> is authority for the completed Android-only/security transition at its exact state. This specification remains authority for the active rewrite direction and later approved increments. <a href="../../reference/public-repository-security.html">Public-repository security policy</a> is a standing current constraint. I2–I9 remain inactive and require fresh approval.</p></section>
+</article></main></body></html>

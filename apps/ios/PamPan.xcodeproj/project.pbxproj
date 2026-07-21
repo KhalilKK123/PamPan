@@ -1,0 +1,92 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {};
+	objectVersion = 60;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		100000000000000000000001 /* PamPanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000001 /* PamPanApp.swift */; };
+		100000000000000000000002 /* FoundationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000002 /* FoundationView.swift */; };
+		100000000000000000000003 /* PamPanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000003 /* PamPanTests.swift */; };
+		100000000000000000000004 /* PamPanUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000004 /* PamPanUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		300000000000000000000001 = {isa = PBXContainerItemProxy; containerPortal = 900000000000000000000001 /* Project object */; proxyType = 1; remoteGlobalIDString = 700000000000000000000001; remoteInfo = PamPan; };
+		300000000000000000000002 = {isa = PBXContainerItemProxy; containerPortal = 900000000000000000000001 /* Project object */; proxyType = 1; remoteGlobalIDString = 700000000000000000000001; remoteInfo = PamPan; };
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		200000000000000000000001 /* PamPanApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PamPanApp.swift; sourceTree = "<group>"; };
+		200000000000000000000002 /* FoundationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundationView.swift; sourceTree = "<group>"; };
+		200000000000000000000003 /* PamPanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PamPanTests.swift; sourceTree = "<group>"; };
+		200000000000000000000004 /* PamPanUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PamPanUITests.swift; sourceTree = "<group>"; };
+		200000000000000000000005 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
+		200000000000000000000006 /* PamPan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PamPan.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		200000000000000000000007 /* PamPanTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PamPanTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		200000000000000000000008 /* PamPanUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PamPanUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		400000000000000000000001 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		400000000000000000000002 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		400000000000000000000003 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		500000000000000000000001 = {isa = PBXGroup; children = (500000000000000000000002 /* PamPan */, 500000000000000000000003 /* PamPanTests */, 500000000000000000000004 /* PamPanUITests */, 500000000000000000000005 /* Configuration */, 500000000000000000000006 /* Products */); sourceTree = "<group>"; };
+		500000000000000000000002 /* PamPan */ = {isa = PBXGroup; children = (200000000000000000000001 /* PamPanApp.swift */, 200000000000000000000002 /* FoundationView.swift */); path = PamPan; sourceTree = "<group>"; };
+		500000000000000000000003 /* PamPanTests */ = {isa = PBXGroup; children = (200000000000000000000003 /* PamPanTests.swift */); path = PamPanTests; sourceTree = "<group>"; };
+		500000000000000000000004 /* PamPanUITests */ = {isa = PBXGroup; children = (200000000000000000000004 /* PamPanUITests.swift */); path = PamPanUITests; sourceTree = "<group>"; };
+		500000000000000000000005 /* Configuration */ = {isa = PBXGroup; children = (200000000000000000000005 /* Base.xcconfig */); path = Configuration; sourceTree = "<group>"; };
+		500000000000000000000006 /* Products */ = {isa = PBXGroup; children = (200000000000000000000006 /* PamPan.app */, 200000000000000000000007 /* PamPanTests.xctest */, 200000000000000000000008 /* PamPanUITests.xctest */); name = Products; sourceTree = "<group>"; };
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		700000000000000000000001 /* PamPan */ = {isa = PBXNativeTarget; buildConfigurationList = 800000000000000000000001; buildPhases = (600000000000000000000001 /* Sources */, 400000000000000000000001 /* Frameworks */, 600000000000000000000004 /* Resources */); buildRules = (); dependencies = (); name = PamPan; productName = PamPan; productReference = 200000000000000000000006 /* PamPan.app */; productType = "com.apple.product-type.application"; };
+		700000000000000000000002 /* PamPanTests */ = {isa = PBXNativeTarget; buildConfigurationList = 800000000000000000000002; buildPhases = (600000000000000000000002 /* Sources */, 400000000000000000000002 /* Frameworks */, 600000000000000000000005 /* Resources */); buildRules = (); dependencies = (300000000000000000000003 /* Dependency */); name = PamPanTests; productName = PamPanTests; productReference = 200000000000000000000007 /* PamPanTests.xctest */; productType = "com.apple.product-type.bundle.unit-test"; };
+		700000000000000000000003 /* PamPanUITests */ = {isa = PBXNativeTarget; buildConfigurationList = 800000000000000000000003; buildPhases = (600000000000000000000003 /* Sources */, 400000000000000000000003 /* Frameworks */, 600000000000000000000006 /* Resources */); buildRules = (); dependencies = (300000000000000000000004 /* Dependency */); name = PamPanUITests; productName = PamPanUITests; productReference = 200000000000000000000008 /* PamPanUITests.xctest */; productType = "com.apple.product-type.bundle.ui-testing"; };
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		900000000000000000000001 /* Project object */ = {isa = PBXProject; attributes = {BuildIndependentTargetsInParallel = 1; LastSwiftUpdateCheck = 1640; LastUpgradeCheck = 1640; TargetAttributes = {700000000000000000000001 = {CreatedOnToolsVersion = 16.4; }; 700000000000000000000002 = {CreatedOnToolsVersion = 16.4; TestTargetID = 700000000000000000000001; }; 700000000000000000000003 = {CreatedOnToolsVersion = 16.4; TestTargetID = 700000000000000000000001; }; }; }; buildConfigurationList = 800000000000000000000004; compatibilityVersion = "Xcode 15.0"; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = (en, Base); mainGroup = 500000000000000000000001; productRefGroup = 500000000000000000000006 /* Products */; projectDirPath = ""; projectRoot = ""; targets = (700000000000000000000001 /* PamPan */, 700000000000000000000002 /* PamPanTests */, 700000000000000000000003 /* PamPanUITests */); };
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		600000000000000000000004 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		600000000000000000000005 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		600000000000000000000006 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		600000000000000000000001 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (100000000000000000000001 /* PamPanApp.swift in Sources */, 100000000000000000000002 /* FoundationView.swift in Sources */); runOnlyForDeploymentPostprocessing = 0; };
+		600000000000000000000002 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (100000000000000000000003 /* PamPanTests.swift in Sources */); runOnlyForDeploymentPostprocessing = 0; };
+		600000000000000000000003 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (100000000000000000000004 /* PamPanUITests.swift in Sources */); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		300000000000000000000003 /* Dependency */ = {isa = PBXTargetDependency; target = 700000000000000000000001 /* PamPan */; targetProxy = 300000000000000000000001; };
+		300000000000000000000004 /* Dependency */ = {isa = PBXTargetDependency; target = 700000000000000000000001 /* PamPan */; targetProxy = 300000000000000000000002; };
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		A00000000000000000000001 = {isa = XCBuildConfiguration; baseConfigurationReference = 200000000000000000000005 /* Base.xcconfig */; buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = ""; ENABLE_PREVIEWS = YES; INFOPLIST_KEY_CFBundleDisplayName = PamPan; PRODUCT_NAME = "$(TARGET_NAME)"; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Debug; };
+		A00000000000000000000002 = {isa = XCBuildConfiguration; baseConfigurationReference = 200000000000000000000005 /* Base.xcconfig */; buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = ""; ENABLE_PREVIEWS = YES; INFOPLIST_KEY_CFBundleDisplayName = PamPan; PRODUCT_NAME = "$(TARGET_NAME)"; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; TARGETED_DEVICE_FAMILY = "1,2"; VALIDATE_PRODUCT = YES; }; name = Release; };
+		A00000000000000000000003 = {isa = XCBuildConfiguration; buildSettings = {BUNDLE_LOADER = "$(TEST_HOST)"; GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 17.0; PRODUCT_BUNDLE_IDENTIFIER = com.pampan.PamPanTests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 5.0; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PamPan.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PamPan"; }; name = Debug; };
+		A00000000000000000000004 = {isa = XCBuildConfiguration; buildSettings = {BUNDLE_LOADER = "$(TEST_HOST)"; GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 17.0; PRODUCT_BUNDLE_IDENTIFIER = com.pampan.PamPanTests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 5.0; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PamPan.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PamPan"; }; name = Release; };
+		A00000000000000000000005 = {isa = XCBuildConfiguration; buildSettings = {GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 17.0; PRODUCT_BUNDLE_IDENTIFIER = com.pampan.PamPanUITests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 5.0; TEST_TARGET_NAME = PamPan; }; name = Debug; };
+		A00000000000000000000006 = {isa = XCBuildConfiguration; buildSettings = {GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 17.0; PRODUCT_BUNDLE_IDENTIFIER = com.pampan.PamPanUITests; PRODUCT_NAME = "$(TARGET_NAME)"; SWIFT_VERSION = 5.0; TEST_TARGET_NAME = PamPan; }; name = Release; };
+		A00000000000000000000007 = {isa = XCBuildConfiguration; buildSettings = {}; name = Debug; };
+		A00000000000000000000008 = {isa = XCBuildConfiguration; buildSettings = {}; name = Release; };
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		800000000000000000000001 = {isa = XCConfigurationList; buildConfigurations = (A00000000000000000000001, A00000000000000000000002); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		800000000000000000000002 = {isa = XCConfigurationList; buildConfigurations = (A00000000000000000000003, A00000000000000000000004); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		800000000000000000000003 = {isa = XCConfigurationList; buildConfigurations = (A00000000000000000000005, A00000000000000000000006); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		800000000000000000000004 = {isa = XCConfigurationList; buildConfigurations = (A00000000000000000000007, A00000000000000000000008); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+/* End XCConfigurationList section */
+	};
+	rootObject = 900000000000000000000001 /* Project object */;
+}
