@@ -16,6 +16,7 @@ documentation:
     - docs/handover/changelog.html
     - docs/planning/active/pampan-native-rewrite.html
     - docs/planning/active/pampan-native-rewrite-roadmap.html
+    - docs/planning/active/pampan-native-rewrite-i1b.html
   completed_documents:
     - docs/planning/completed/pampan-rewrite-spec.html
     - docs/planning/completed/pampan-rewrite-spec-i1-roadmap.html
@@ -25,20 +26,22 @@ work:
   active:
     - id: PAMPAN-NATIVE-REWRITE
       title: Android native rewrite
-      status: "I1A complete / PASS; larger Android foundation I1 BLOCKED pending runtime, accessibility, and actual CI evidence"
+      status: "I1B approved / not started for physical-device evidence; larger Android foundation I1 remains BLOCKED pending separate actual-CI and emulator evidence"
       spec: docs/planning/active/pampan-native-rewrite.html
       roadmap: docs/planning/active/pampan-native-rewrite-roadmap.html
-      increment: I1
-      increment_status: "implemented and review-remediated; I1A complete / PASS; BLOCKED pending Android emulator launch, connected tests, TalkBack, and actual GitHub Actions evidence"
-      base_commit: 0512f84
+      increment: I1B
+      increment_plan: docs/planning/active/pampan-native-rewrite-i1b.html
+      increment_status: "approved / not started; physical-device connected tests, offline launch, and user-observed TalkBack evidence only"
+      base_commit: fc32989db985a9a42ee3af61afd3b0793c200f47
       last_verified_commit: null
-      evidence: "I1A complete / PASS for I1A@0512f84/worktree-2d120810/index-e3b0c442/untracked-37221eae: configured implement_verify PASS and implement_review PASS on the same state. Android-only CI/validators; redacted scanner self-test, full repository/index/history/ref scan, generated APK scan, strict offline ktlint/lint/unit/assemble/release-lock, assembled boundary, docs/diff/legacy/dependency-lock checks all PASS. Protected iOS and Android app-source hashes were unchanged; gates edited no tracked files."
-      blocker: "The larger I1 remains BLOCKED / pending verification: no successful offline emulator launch, connected tests, manual TalkBack/accessibility result, or actual GitHub Actions run is recorded. I2-I9 are inactive and require fresh approval."
+      evidence: "I1A complete / PASS for I1A@0512f84/worktree-2d120810/index-e3b0c442/untracked-37221eae. Actual GitHub Actions run 29944925149 for fc32989 completed FAILURE at Install and assert pinned Android packages after the expected emulator 36.6.11.0 version probe; no CI build, emulator, ADB, connected-test, or launch evidence was reached. Host probe: Java 25.0.3 present; adb/emulator/sdkmanager/avdmanager and /dev/kvm absent. No physical-device I1B evidence is recorded yet."
+      blocker: "I1B is approved but not started. Even if local physical-device, connected-test, offline-launch, and TalkBack gates pass, larger I1 remains BLOCKED pending a separate successful actual GitHub Actions and emulator evidence increment. I2-I9 are inactive and require fresh approval."
       relevant_paths: "SECURITY.md; docs/reference/public-repository-security.html; apps/android/ (only active native application); apps/ios/ (preserved dormant, no active gate); supabase/ and contracts/ (reserved only); .github/workflows/foundation.yml; scripts/check-native-foundation.py; scripts/check-secrets.py; pam_pan/ (must remain unchanged from 0512f84)"
       standing_constraint: "Public repository: no secrets or sensitive data in source, docs, tests, fixtures, examples, CI configuration/output, artifacts, signing material, local configuration intended for commit, or Git history. Audit and report only redacted evidence."
       last_completed_increment: I1A
       last_verified_state: I1A@0512f84/worktree-2d120810/index-e3b0c442/untracked-37221eae
       completed_record: docs/planning/completed/pampan-native-rewrite-i1a.html
+      execution_base_tree: "fc32989db985a9a42ee3af61afd3b0793c200f47; tree equal to completed I1A foundation e14ddad"
   completed:
     - id: PAMPAN-REWRITE-SPEC
       title: Repository reverse-engineering and rewrite specification

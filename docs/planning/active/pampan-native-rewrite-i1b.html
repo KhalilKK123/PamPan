@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PAMPAN-NATIVE-REWRITE I1B — physical-device verification</title>
+  <link rel="stylesheet" href="../../assets/docs-style.css">
+</head>
+<body><main><article>
+<!-- DOC-NAV:START --><nav class="doc-nav" aria-label="Documentation"><a href="../../../index.html">Portal</a> · <a href="../../../README.md">README</a> · <a href="../../README.md">Docs guide</a> · <a href="../../reference/system-overview.html">System overview</a> · <a href="../../reference/startup-and-verification.html">Verification</a> · <a href="../../handover/current.html">Current handover</a> · <a href="../../handover/changelog.html">Changelog</a></nav><!-- DOC-NAV:END -->
+<h1>PAMPAN-NATIVE-REWRITE / I1B</h1>
+<p class="meta"><strong>Type:</strong> approved active increment plan · <strong>Authority:</strong> user-approved execution boundary · <strong>Feature:</strong> PAMPAN-NATIVE-REWRITE · <strong>Increment:</strong> I1B · <strong>Status:</strong> approved / not started · <strong>Execution base:</strong> <code>fc32989db985a9a42ee3af61afd3b0793c200f47</code> · <strong>Foundation tree:</strong> equal to completed I1A foundation <code>e14ddad</code> · <strong>Updated:</strong> 2026-07-22</p>
+<p class="callout"><strong>Scope-limited evidence increment.</strong> I1B may establish local physical-device, connected-test, offline launch, and TalkBack evidence for the exact executable state. It cannot complete the larger I1: a separate approved increment must still obtain successful actual-CI and emulator evidence.</p>
+
+<section id="objective"><h2>Objective and approved outcome</h2>
+<p>Prepare a minimal, user-owned Android verification environment and use exactly one user-authorized USB-connected Android phone to verify the existing Android foundation without changing application code, Gradle or runtime/build configuration, validators, tests, or workflow files. Preserve only sanitized results that identify the executable state and gate outcomes, never the device or host.</p>
+</section>
+
+<section id="current-evidence"><h2>Current evidence at approval</h2>
+<ul>
+  <li>The clean planning base is <code>fc32989db985a9a42ee3af61afd3b0793c200f47</code>; its tree equals the completed I1A foundation at <code>e14ddad</code>.</li>
+  <li>Actual GitHub Actions run <code>29944925149</code> for <code>fc32989</code> completed <strong>FAILURE</strong> in <code>Install and assert pinned Android packages</code>. The toolchain check reached the emulator version probe and reported the expected emulator version <code>36.6.11.0</code>, but the failed installation step prevented build, emulator, ADB, connected-test, and launch evidence. This is current CI evidence, not an I1B or larger-I1 PASS.</li>
+  <li>The local host probe found Java <code>25.0.3</code>, no available <code>adb</code>, <code>emulator</code>, <code>sdkmanager</code>, or <code>avdmanager</code>, and no <code>/dev/kvm</code>. The system Java is not the project-compatible JDK and is not used for the gate.</li>
+  <li>A physical Android phone is available. Its identity, serial, host authorization fingerprint, accounts, contents, and personal data are outside durable evidence.</li>
+</ul>
+</section>
+
+<section id="scope"><h2>Approved scope</h2>
+<ol>
+  <li><strong>Session-only tool environment:</strong> materialize the exact JDK 17 and minimal Android command-line packages in a user-owned temporary or ignored location. Use session-scoped <code>JAVA_HOME</code>, <code>ANDROID_HOME</code>, <code>ANDROID_SDK_ROOT</code>, and <code>PATH</code> only. Do not use <code>sudo</code>, a system package manager, a global environment file, an emulator, a system image, or KVM.</li>
+  <li><strong>User-controlled USB authorization:</strong> use wired USB debugging only. The user reviews the phone's RSA prompt, authorizes only the expected host, and confirms that the selected device profile and <code>com.pampan.pampan</code> debug-package state are safe for installation. Wireless debugging is excluded.</li>
+  <li><strong>Single intended target:</strong> require exactly one authorized Android device before any install or test. Device serials and host fingerprints may be used transiently by tools but must never enter commands captured for durable evidence, files, logs, screenshots, notes, or documentation.</li>
+  <li><strong>Strict repository verification:</strong> run the repository security/native-foundation preflight and strict Android build on the exact executable state, then run <code>connectedDebugAndroidTest</code> against the one intended device.</li>
+  <li><strong>Offline manual verification:</strong> the user places the phone offline, launches the debug application, confirms the deterministic foundation screen, and performs the approved TalkBack checklist.</li>
+  <li><strong>Sanitized closeout:</strong> record tool sources, checksums, asserted versions, exact repository state, command outcomes, user-observed results, tracked-drift result, remaining actual-CI/emulator blocker, and documentation validation without sensitive raw output.</li>
+</ol>
+</section>
+
+<section id="toolchain"><h2>Toolchain materialization contract</h2>
+<table><thead><tr><th>Component</th><th>Approved source and integrity</th><th>Required assertion</th></tr></thead><tbody>
+  <tr><td>JDK</td><td>Adoptium Temurin <code>17.0.19+10</code> Linux x64 archive used by the repository workflow; SHA-256 <code>d8afc263758141a66e0e3aafc321e783f7016696f4eaea067d340a269037d331</code>.</td><td><code>java -version</code> reports exact OpenJDK <code>17.0.19</code> through the session-scoped JDK path.</td></tr>
+  <tr><td>Android command-line tools</td><td>Google archive <code>commandlinetools-linux-13114758_latest.zip</code>; SHA-256 <code>7ec965280a073311c339e571cd5de778b9975026cfcbe79f2b1cdcb1e15317ee</code>.</td><td><code>cmdline-tools/latest/source.properties</code> reports revision <code>19.0</code>.</td></tr>
+  <tr><td>Minimal SDK packages</td><td>Install through the checksum-verifying Google <code>sdkmanager</code>: <code>platform-tools</code>, <code>platforms;android-36</code>, and <code>build-tools;36.0.0</code>.</td><td>Package metadata reports platform-tools <code>37.0.0</code>, API 36 revision <code>2</code>, and Build Tools <code>36.0.0</code>. Any mismatch stops execution.</td></tr>
+</tbody></table>
+<p>No emulator package, system image, AVD, or KVM setup belongs to I1B. The repository's complete toolchain checker requires those excluded packages, so I1B must assert the approved minimal package metadata directly and must not weaken or edit the checker.</p>
+</section>
+
+<section id="execution"><h2>Execution sequence and command boundary</h2>
+<ol>
+  <li>Confirm the exact Git state, clean tracked executable/configuration surface, frozen <code>pam_pan/</code>, dormant <code>apps/ios/</code>, and no unexpected local material before downloading or connecting a device.</li>
+  <li>Download the two approved archives, verify both SHA-256 digests before extraction, install only the minimal SDK packages, and assert every required version. Stop before extraction or use on a checksum mismatch.</li>
+  <li>With session-scoped tool paths active, run from the repository root: <code>python3 scripts/check-native-foundation.py</code>, <code>python3 scripts/check-secrets.py</code>, <code>git diff --exit-code 0512f84 -- pam_pan</code>, and <code>git diff --check</code>.</li>
+  <li>From <code>apps/android/</code>, run <code>./gradlew --no-daemon --dependency-verification strict ktlintCheck lintDebug testDebugUnitTest assembleDebug :app:writeReleaseRuntimeLock</code>. Then require no lock drift, run <code>python3 ../../scripts/check-native-foundation.py --require-assembled-android</code>, and run the artifact-only secret scan over <code>app/build/outputs/apk/debug/app-debug.apk</code>.</li>
+  <li>Before device work, the user confirms USB debugging, expected-host RSA authorization, safe profile/package state, and absence of any destructive or data-removal prompt. Require exactly one device in authorized <code>device</code> state; stop for zero, multiple, unexpected, offline, or unauthorized targets.</li>
+  <li>Run <code>./gradlew --offline --no-daemon --dependency-verification strict connectedDebugAndroidTest</code>. Do not uninstall packages, clear application/device data, alter accounts, change device policy, or use broad <code>logcat</code>.</li>
+  <li>The user disables network connectivity, launches <code>com.pampan.pampan/.MainActivity</code>, confirms the deterministic foundation screen, and performs the TalkBack checklist. Record only pass/fail observations.</li>
+  <li>Re-run tracked-drift, frozen-legacy, documentation, and diff checks. Remove or retain downloaded tools only in their approved user-owned untracked location; never document machine-local paths.</li>
+</ol>
+</section>
+
+<section id="talkback"><h2>User-observed TalkBack checklist</h2>
+<ol>
+  <li>Install and launch the candidate with network unavailable. The deterministic foundation screen opens without an account, service, permission, or network prompt.</li>
+  <li>Enable TalkBack and launch PamPan from the launcher. The app can be entered and the screen receives accessibility focus.</li>
+  <li>Swipe forward. The visible title “PamPan,” status “Native foundation,” and message “Your pantry, thoughtfully managed.” are announced accurately in logical top-to-bottom order, without an unexpected focus trap or empty or unlabeled target.</li>
+  <li>Swipe backward. Navigation reverses predictably, focus remains visible, and the user can leave through standard system navigation.</li>
+  <li>Confirm there is no unlabeled actionable control, inaccessible required action, unexpected permission dialog, or network/service error surface. The current foundation intentionally has no product controls.</li>
+  <li>Record every item as PASS or FAIL with a concise sanitized observation. Partial, inferred, screenshot-only, automated-only, or unobserved evidence is insufficient.</li>
+</ol>
+<p>These observations are manual user evidence, not an automated accessibility certification. Preserve the result and device-class-neutral context only; do not preserve recordings, screenshots, personal notifications, device identifiers, or accessibility-service logs.</p>
+</section>
+
+<section id="exit-gate"><h2>Exact I1B exit gate</h2>
+<p><strong>I1B is PASS only when all of the following apply to one exact executable state:</strong></p>
+<ul>
+  <li>approved tool archives have their recorded sources and SHA-256 checksums, and JDK/Android package metadata match every required exact version;</li>
+  <li>exactly one expected USB-connected device is user-authorized and detected, with no serial or host fingerprint in durable evidence;</li>
+  <li>repository native/security preflight and strict dependency-verified Android build, lint, unit tests, assembly, release-lock check, assembled-boundary audit, and APK scan pass;</li>
+  <li><code>connectedDebugAndroidTest</code> passes on the intended physical device;</li>
+  <li>the debug application launches offline and the user-observed foundation smoke check passes;</li>
+  <li>the user-observed TalkBack checklist passes;</li>
+  <li>there is no tracked drift beyond the approved planning/documentation capture, with <code>pam_pan/</code> unchanged from <code>0512f84</code> and <code>apps/ios/</code> untouched;</li>
+  <li><code>python3 scripts/check-docs.py</code> and <code>git diff --check</code> pass.</li>
+</ul>
+<p>A local I1B PASS narrows the larger-I1 blocker to successful actual GitHub Actions and emulator evidence. It does not make I1 complete or PASS, does not remediate run <code>29944925149</code>, and does not activate I2–I9.</p>
+</section>
+
+<section id="non-goals"><h2>Exclusions</h2>
+<ul>
+  <li>No application, test, Gradle, dependency, validator, workflow, runtime/build configuration, or product-behavior change.</li>
+  <li>No iOS action of any kind; <code>apps/ios/</code> remains dormant and untouched. No <code>pam_pan/</code> change.</li>
+  <li>No emulator, system image, AVD, KVM, wireless debugging, global tool installation, <code>sudo</code>, system package manager, persistent shell configuration, GitHub rerun, push, pull request, release, signing, or cloud/service work.</li>
+  <li>No raw or broad device logs, crash dumps, screenshots containing personal material, device serials, host fingerprints, accounts, phone numbers, notifications, private endpoints, secrets, or personal data in evidence.</li>
+  <li>Local branch or commit creation is permitted only as a later approved workflow action. No remote push is authorized.</li>
+</ul>
+</section>
+
+<section id="stop-conditions"><h2>Stop conditions and risks</h2>
+<ul>
+  <li>Stop on an archive checksum or asserted-version mismatch, failed license/source review, or need for a global or privileged installation.</li>
+  <li>Stop on an unexpected, multiple, unauthorized, offline, or ambiguously identified device; unexpected RSA prompt; wireless target; unsafe package/profile collision; uninstall, data-clear, account, policy, or destructive warning.</li>
+  <li>Stop before preserving sensitive output. Summarize only sanitized categorical results; never copy broad <code>adb</code>, <code>logcat</code>, environment, USB, or device-property output into durable evidence.</li>
+  <li>Stop if a code, test, Gradle, validator, workflow, configuration, dependency, application behavior, iOS, legacy, or scope change appears necessary. Return the blocker for fresh approval.</li>
+  <li>A suspected disclosure invokes <a href="../../reference/public-repository-security.html">the public-repository stop condition</a>: do not reproduce the value; escalate privately for revocation or rotation and redacted re-verification.</li>
+</ul>
+</section>
+
+<section id="completion"><h2>Completion and handoff</h2>
+<p>After execution, independent verification and review must evaluate the same exact implementation state before final documentation synchronization. A completed I1B record must contain sanitized tool/version/checksum assertions, command-level outcomes, device-count/authorization outcome without identifiers, connected-test and manual user-observation results, drift checks, and the narrowed remaining blocker. Keep this active plan authoritative until that gated finalization occurs.</p>
+</section>
+</article></main></body></html>
