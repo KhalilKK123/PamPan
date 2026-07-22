@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PAMPAN-NATIVE-REWRITE I1B-R1 — dependency-verification metadata prerequisite</title>
+  <link rel="stylesheet" href="../../assets/docs-style.css">
+</head>
+<body><main><article>
+<!-- DOC-NAV:START --><nav class="doc-nav" aria-label="Documentation"><a href="../../../index.html">Portal</a> · <a href="../../../README.md">README</a> · <a href="../../README.md">Docs guide</a> · <a href="../../reference/system-overview.html">System overview</a> · <a href="../../reference/startup-and-verification.html">Verification</a> · <a href="../../handover/current.html">Current handover</a> · <a href="../../handover/changelog.html">Changelog</a></nav><!-- DOC-NAV:END -->
+<h1>PAMPAN-NATIVE-REWRITE / I1B-R1</h1>
+<p class="meta"><strong>Type:</strong> completed execution record · <strong>Authority:</strong> independently verified and reviewed implementation evidence · <strong>Feature:</strong> PAMPAN-NATIVE-REWRITE · <strong>Parent increment:</strong> I1B · <strong>Increment:</strong> I1B-R1 · <strong>Status:</strong> complete / PASS · <strong>Planning base:</strong> <code>9c6fa158f0e463d5b45844e3cd72511548387c10</code> · <strong>Verified state:</strong> <code>I1B-R1@9c6fa158f0e463d5b45844e3cd72511548387c10/worktree-408a108c7140d0acccd2a6ba63e84bcced01d59bdf517165255c17967b5e2c3f/index-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/untracked-f6d1fb162eb0a77b4c47b5d034e8c0c44b6a627e578598610eafcc9259573e50</code> · <strong>Updated:</strong> 2026-07-22</p>
+<p class="callout"><strong>Complete / PASS for the exact recorded state.</strong> Three already-resolved dependency metadata artifacts were independently authenticated and exactly three SHA-256 entries were added without changing dependency selection or application behavior. This record itself supplies no device, launch, TalkBack, emulator, or actual-CI evidence. Subsequent physical-device I1B is now complete / PASS at its own exact state; the larger I1 remains BLOCKED on emulator and successful actual-CI evidence.</p>
+
+<section id="trigger"><h2>Trigger and current evidence</h2>
+<p>The checksum-verified JDK 17 and minimal Android SDK toolchain required by I1B are locally ready. Before any phone was connected or modified, the strict pre-device Gradle build stopped because dependency verification metadata did not yet trust exactly these resolved metadata artifacts:</p>
+<ul>
+  <li><code>com.google.guava:guava-parent:33.3.1-jre</code> POM;</li>
+  <li><code>org.junit:junit-bom:5.10.2</code> Gradle module metadata;</li>
+  <li><code>org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.8.0</code> POM.</li>
+</ul>
+<p>This is a fail-closed dependency-verification result. It is not evidence that the artifacts are malicious, authentic, or suitable for trust. No physical-device connection, ADB authorization, installation, connected test, offline launch, or TalkBack check has begun.</p>
+</section>
+
+<section id="objective"><h2>Objective</h2>
+<p>Independently authenticate each of the three exact artifacts, then add one accurate SHA-256 verification entry for each to <code>apps/android/gradle/verification-metadata.xml</code>. Preserve strict dependency verification and prove that the exact three-entry change closes the observed metadata gap without selecting new dependencies, weakening trust policy, or changing runtime behavior.</p>
+</section>
+
+<section id="authentication"><h2>Artifact-authentication contract</h2>
+<ol>
+  <li>Use disposable storage outside repository history. Do not trust a checksum merely because Gradle downloaded or generated it from the same repository artifact being evaluated.</li>
+  <li>Resolve the exact artifact bytes and coordinates from official project and repository sources. Compare against an independent official source wherever one exists.</li>
+  <li>Verify the strongest official sidecar available for the exact artifact, including a detached signature when published. Validate the signer rather than treating signature presence as authenticity.</li>
+  <li>Establish same-project signer continuity against an already repository-trusted sibling artifact. Record only public provenance facts needed to explain the trust decision; do not preserve raw keyrings, caches, machine paths, broad logs, or unrelated artifacts.</li>
+  <li>Require agreement between the authenticated bytes and the SHA-256 value proposed for repository metadata. A missing, invalid, inconsistent, expired, revoked, or unanchored provenance path is a blocker, not a reason to broaden trust.</li>
+</ol>
+<p>Authentication is artifact-specific. Success for one project, version, file type, signer, or checksum does not authorize another.</p>
+</section>
+
+<section id="implementation"><h2>Approved executable change</h2>
+<p>The only approved executable/configuration edit is exactly three SHA-256 component-artifact entries in <code>apps/android/gradle/verification-metadata.xml</code>, one for each artifact named above. The entries must use the coordinates, artifact filenames, and authenticated digests actually observed. Existing trusted entries and verification mode remain intact.</p>
+<p>No dependency version, repository, lock, Gradle script, wrapper, task, validator, workflow, application, test, source, resource, manifest, or generated artifact may change. Do not enable broad trust, relax strict mode, ignore metadata failures, accept whole groups, or generate and accept an unreviewed metadata expansion.</p>
+</section>
+
+<section id="verification"><h2>Verification sequence</h2>
+<ol>
+  <li>Confirm the exact planning base, protected Android/iOS/legacy boundaries, and a diff limited to the approved planning documentation before implementation.</li>
+  <li>Complete the independent provenance checks for all three artifacts in disposable storage. Stop if any check is ambiguous or fails.</li>
+  <li>Add exactly the three authenticated SHA-256 entries and inspect the executable diff mechanically and manually.</li>
+  <li>Using a fresh disposable Gradle cache, run the strict dependency-verified online build needed to populate only authenticated dependencies. Then run the corresponding strict offline build against that same cache.</li>
+  <li>Run Android formatting/lint, unit tests, debug assembly, release-runtime lock generation and no-drift comparison, native-foundation and assembled-boundary audits, and the artifact-only secret scan over the generated debug APK.</li>
+  <li>Run frozen-legacy, dormant-iOS/prohibited-drift, dependency-lock, public-repository security, documentation, and diff checks. The build must expose no additional dependency-verification metadata gap.</li>
+  <li>Gate one exact implementation state through configured independent verification and review. Any behavior-affecting remediation creates a new state and invalidates both earlier gate results.</li>
+</ol>
+</section>
+
+<section id="exit-gate"><h2>Exact I1B-R1 exit gate</h2>
+<p><strong>I1B-R1 is PASS only when all of the following apply to the same exact implementation state:</strong></p>
+<ul>
+  <li>all three exact artifacts have successful independent provenance, strongest available sidecar/signature verification, and same-project trusted-sibling signer continuity;</li>
+  <li>the executable diff contains exactly three accurate SHA-256 entries in <code>verification-metadata.xml</code> and no other behavior-affecting change;</li>
+  <li>fresh disposable-cache strict online and corresponding offline builds pass with no further verification-metadata gap;</li>
+  <li>lint, unit tests, debug assembly, release-lock no-drift check, native and assembled audits, APK secret scan, frozen-legacy, dormant-iOS/prohibited-drift, dependency-lock, documentation, and diff checks pass;</li>
+  <li>configured <code>implement_verify</code> and <code>implement_review</code> return explicit PASS decisions for the same state;</li>
+  <li>final documentation validation passes without behavior-affecting documentation edits.</li>
+</ul>
+<p>A PASS allows I1B-R1 to move to completed and I1B to resume from the new exact state. It does not supply device, connected-test, offline-launch, TalkBack, emulator, actual-CI, or larger-I1 evidence.</p>
+</section>
+
+<section id="exclusions"><h2>Explicit exclusions</h2>
+<ul>
+  <li>No application, source, resource, test, dependency declaration or version, repository, lock, Gradle script, wrapper, validator, workflow, runtime/build behavior, or product change.</li>
+  <li>No device, USB debugging, ADB, TalkBack, emulator, AVD, system image, KVM, CI run, GitHub action, remote request, push, pull request, release, or signing work.</li>
+  <li>No system package, global environment, persistent shell, iOS, Supabase, contract, migration, service, or frozen <code>pam_pan/</code> work.</li>
+  <li>No broad verification-policy exception, generated bulk trust, speculative metadata, or acceptance of an artifact based only on its download source or locally computed checksum.</li>
+  <li>No secret, credential, private key, signing material, private endpoint, sensitive user data, device identifier, or raw session transcript in repository evidence.</li>
+</ul>
+</section>
+
+<section id="stops"><h2>Stop conditions</h2>
+<ul>
+  <li>Stop if any exact artifact cannot be independently authenticated, a signature or sidecar fails, signer continuity is not established, or sources disagree.</li>
+  <li>Stop if strict resolution requests any fourth metadata entry or dependency change; return the exact redacted coordinate/category for fresh scope review.</li>
+  <li>Stop if implementation requires any edit beyond the exact three verification entries or if a lock, source, test, workflow, validator, iOS, or legacy file drifts.</li>
+  <li>Stop on suspected sensitive output or credential disclosure. Do not reproduce the value; follow the public-repository security escalation and revocation/rotation boundary.</li>
+</ul>
+</section>
+
+<section id="handoff"><h2>Completion and handoff</h2>
+<p>I1B-R1 is complete and no longer active. The configured verification and review gates returned explicit PASS decisions for the same exact state recorded above, with no blocking review findings and no state mutation. Subsequent <a href="pampan-native-rewrite-i1b.html">physical-device I1B</a> resumed from this accepted state and is now complete / PASS at its own exact state. The larger I1 remains BLOCKED pending successful emulator evidence and a successful actual GitHub Actions run.</p>
+</section>
+
+<section id="verified-provenance"><h2>Verified provenance</h2>
+<ul>
+  <li>Each candidate artifact matched byte-for-byte between canonical Maven Central and Google's independent GCS Maven mirror.</li>
+  <li>The Guava parent POM's published SHA-1 sidecar and SHA-512-protected detached signature passed. The JUnit BOM module metadata's published SHA-512 sidecar and SHA-256-protected detached signature passed. The Kotlin coroutines BOM POM's published SHA-512 sidecar and SHA-512-protected detached signature passed.</li>
+  <li>All six candidate and trusted-sibling signatures were valid. Same-project signer continuity matched exactly against already trusted sibling artifacts, and the signer keys were current and unrevoked at verification time.</li>
+  <li>The authenticated SHA-256 values were <code>55441db27e8869dfefe053059bdf478bdc7e95585642bf391f0023345fd56287</code> for the Guava parent POM, <code>de23b114b3e4119a8fe6eb17bed5a3852816698bace67071579d6d927ebb080a</code> for the JUnit BOM module metadata, and <code>1239e9dbe1397cd5971342956b2511bc3ace7b641842e4372a088dcfa8b9ad55</code> for the Kotlin coroutines BOM POM.</li>
+</ul>
+<p>Only public artifact-provenance conclusions are preserved. Disposable paths, machine-local caches, raw keyrings, and broad command transcripts are intentionally excluded.</p>
+</section>
+
+<section id="implementation-result"><h2>Implementation and verification result</h2>
+<ul>
+  <li>The executable diff is exactly three component-artifact entries, 13 additions, and zero deletions in <code>apps/android/gradle/verification-metadata.xml</code>. No other behavior-affecting file changed.</li>
+  <li>A strict online build using a fresh disposable Gradle cache passed, followed by a strict offline replay. A forced offline replay with <code>--rerun-tasks</code> also passed with all 61 tasks executed. No fourth dependency-verification gap appeared.</li>
+  <li>Release lock no-drift, native-source and assembled-boundary audits, APK-only redacted scanning, full redacted scan and scanner self-test, frozen <code>pam_pan/</code>, dormant iOS, dependency locks, documentation, and diff checks passed.</li>
+  <li>An initial sandbox-contained offline attempt was unable to create the local Gradle daemon socket before build execution. The identical hard-offline command passed outside that sandbox restriction; this was an execution-environment limitation, not a repository failure.</li>
+</ul>
+</section>
+</article></main></body></html>

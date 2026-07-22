@@ -16,32 +16,33 @@ documentation:
     - docs/handover/changelog.html
     - docs/planning/active/pampan-native-rewrite.html
     - docs/planning/active/pampan-native-rewrite-roadmap.html
-    - docs/planning/active/pampan-native-rewrite-i1b.html
   completed_documents:
     - docs/planning/completed/pampan-rewrite-spec.html
     - docs/planning/completed/pampan-rewrite-spec-i1-roadmap.html
     - docs/planning/completed/pampan-native-rewrite-i1a.html
+    - docs/planning/completed/pampan-native-rewrite-i1b-r1.html
+    - docs/planning/completed/pampan-native-rewrite-i1b.html
 work:
   primary: PAMPAN-NATIVE-REWRITE
   active:
     - id: PAMPAN-NATIVE-REWRITE
       title: Android native rewrite
-      status: "I1B approved / not started for physical-device evidence; larger Android foundation I1 remains BLOCKED pending separate actual-CI and emulator evidence"
+      status: "I1A, I1B-R1, and physical-device I1B complete / PASS at recorded states; larger Android foundation I1 remains BLOCKED"
       spec: docs/planning/active/pampan-native-rewrite.html
       roadmap: docs/planning/active/pampan-native-rewrite-roadmap.html
-      increment: I1B
-      increment_plan: docs/planning/active/pampan-native-rewrite-i1b.html
-      increment_status: "approved / not started; physical-device connected tests, offline launch, and user-observed TalkBack evidence only"
-      base_commit: fc32989db985a9a42ee3af61afd3b0793c200f47
+      increment: I1
+      increment_plan: docs/planning/active/pampan-native-rewrite-roadmap.html
+      increment_status: "BLOCKED / pending verification; physical-device gate complete, successful Android emulator evidence and a successful actual GitHub Actions run remain"
+      base_commit: 9c6fa158f0e463d5b45844e3cd72511548387c10
       last_verified_commit: null
-      evidence: "I1A complete / PASS for I1A@0512f84/worktree-2d120810/index-e3b0c442/untracked-37221eae. Actual GitHub Actions run 29944925149 for fc32989 completed FAILURE at Install and assert pinned Android packages after the expected emulator 36.6.11.0 version probe; no CI build, emulator, ADB, connected-test, or launch evidence was reached. Host probe: Java 25.0.3 present; adb/emulator/sdkmanager/avdmanager and /dev/kvm absent. No physical-device I1B evidence is recorded yet."
-      blocker: "I1B is approved but not started. Even if local physical-device, connected-test, offline-launch, and TalkBack gates pass, larger I1 remains BLOCKED pending a separate successful actual GitHub Actions and emulator evidence increment. I2-I9 are inactive and require fresh approval."
+      evidence: "I1B complete / PASS for I1B@9c6fa158f0e463d5b45844e3cd72511548387c10/worktree-a8387e8235d92963a8705dd6124b68aa5e895f893672f06c2b92a052318c5654/index-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/untracked-dd1cad3463e6b1cd65f5ae7af052011bd7c53f216672bee40bf8f6aa58e3fbf5. Exact tool integrity/version assertions, one authorized wired target, hard-offline strict connected test, automatic package cleanup, offline cold launch, all five approved manual foundation/TalkBack checks, evidence hygiene, and same-state independent verification/review passed. I1B-R1 remains complete / PASS. Actual GitHub Actions run 29944925149 remains FAILURE before build/runtime evidence."
+      blocker: "Larger I1 remains BLOCKED pending successful Android emulator evidence and a successful actual GitHub Actions run. I2-I9 remain inactive and require fresh approval."
       relevant_paths: "SECURITY.md; docs/reference/public-repository-security.html; apps/android/ (only active native application); apps/ios/ (preserved dormant, no active gate); supabase/ and contracts/ (reserved only); .github/workflows/foundation.yml; scripts/check-native-foundation.py; scripts/check-secrets.py; pam_pan/ (must remain unchanged from 0512f84)"
       standing_constraint: "Public repository: no secrets or sensitive data in source, docs, tests, fixtures, examples, CI configuration/output, artifacts, signing material, local configuration intended for commit, or Git history. Audit and report only redacted evidence."
-      last_completed_increment: I1A
-      last_verified_state: I1A@0512f84/worktree-2d120810/index-e3b0c442/untracked-37221eae
-      completed_record: docs/planning/completed/pampan-native-rewrite-i1a.html
-      execution_base_tree: "fc32989db985a9a42ee3af61afd3b0793c200f47; tree equal to completed I1A foundation e14ddad"
+      last_completed_increment: I1B
+      last_verified_state: I1B@9c6fa158f0e463d5b45844e3cd72511548387c10/worktree-a8387e8235d92963a8705dd6124b68aa5e895f893672f06c2b92a052318c5654/index-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/untracked-dd1cad3463e6b1cd65f5ae7af052011bd7c53f216672bee40bf8f6aa58e3fbf5
+      completed_record: docs/planning/completed/pampan-native-rewrite-i1b.html
+      execution_base_tree: "Physical-device I1B passed without executable drift beyond the accepted I1B-R1 three-entry verification-metadata change; larger I1 remains blocked on emulator and successful actual-CI evidence"
   completed:
     - id: PAMPAN-REWRITE-SPEC
       title: Repository reverse-engineering and rewrite specification

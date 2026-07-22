@@ -3,24 +3,43 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>PAMPAN-NATIVE-REWRITE I1B — physical-device verification</title>
+  <title>PAMPAN-NATIVE-REWRITE I1B — completed physical-device verification</title>
   <link rel="stylesheet" href="../../assets/docs-style.css">
 </head>
 <body><main><article>
 <!-- DOC-NAV:START --><nav class="doc-nav" aria-label="Documentation"><a href="../../../index.html">Portal</a> · <a href="../../../README.md">README</a> · <a href="../../README.md">Docs guide</a> · <a href="../../reference/system-overview.html">System overview</a> · <a href="../../reference/startup-and-verification.html">Verification</a> · <a href="../../handover/current.html">Current handover</a> · <a href="../../handover/changelog.html">Changelog</a></nav><!-- DOC-NAV:END -->
 <h1>PAMPAN-NATIVE-REWRITE / I1B</h1>
-<p class="meta"><strong>Type:</strong> approved active increment plan · <strong>Authority:</strong> user-approved execution boundary · <strong>Feature:</strong> PAMPAN-NATIVE-REWRITE · <strong>Increment:</strong> I1B · <strong>Status:</strong> approved / not started · <strong>Execution base:</strong> <code>fc32989db985a9a42ee3af61afd3b0793c200f47</code> · <strong>Foundation tree:</strong> equal to completed I1A foundation <code>e14ddad</code> · <strong>Updated:</strong> 2026-07-22</p>
-<p class="callout"><strong>Scope-limited evidence increment.</strong> I1B may establish local physical-device, connected-test, offline launch, and TalkBack evidence for the exact executable state. It cannot complete the larger I1: a separate approved increment must still obtain successful actual-CI and emulator evidence.</p>
+<p class="meta"><strong>Type:</strong> completed increment record · <strong>Authority:</strong> accepted implementation, configured independent verification, and configured independent review · <strong>Feature:</strong> PAMPAN-NATIVE-REWRITE · <strong>Increment:</strong> I1B · <strong>Status:</strong> complete / PASS · <strong>Implementation state:</strong> <code>I1B@9c6fa158f0e463d5b45844e3cd72511548387c10/worktree-a8387e8235d92963a8705dd6124b68aa5e895f893672f06c2b92a052318c5654/index-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/untracked-dd1cad3463e6b1cd65f5ae7af052011bd7c53f216672bee40bf8f6aa58e3fbf5</code> · <strong>Completed:</strong> 2026-07-23</p>
+<p class="callout"><strong>Scope-limited completion.</strong> I1B completed the approved physical Android-device gate for the exact state above. It does not complete the larger I1: successful Android emulator evidence and a successful actual GitHub Actions run remain missing. The existing actual run remains a factual failure.</p>
 
 <section id="objective"><h2>Objective and approved outcome</h2>
 <p>Prepare a minimal, user-owned Android verification environment and use exactly one user-authorized USB-connected Android phone to verify the existing Android foundation without changing application code, Gradle or runtime/build configuration, validators, tests, or workflow files. Preserve only sanitized results that identify the executable state and gate outcomes, never the device or host.</p>
 </section>
 
-<section id="current-evidence"><h2>Current evidence at approval</h2>
+<section id="r1-prerequisite"><h2>Completed I1B-R1 prerequisite</h2>
+<p>The checksum-verified Temurin JDK 17 and minimal Android SDK packages are locally ready. The initial strict pre-device build failed closed on three missing trust entries. I1B-R1 then independently authenticated those exact artifact bytes across Maven Central and Google's GCS mirror, verified their strongest published sidecars and signatures plus same-project trusted-sibling signer continuity, and added exactly three SHA-256 entries to <code>verification-metadata.xml</code>.</p>
+<p>Fresh-cache strict online, offline replay, and forced offline execution passed with no fourth gap. The full static/build/security gate plus configured independent verification and review passed the same exact state. See the <a href="pampan-native-rewrite-i1b-r1.html">completed I1B-R1 record</a>. That prerequisite supplied no device evidence by itself; the separate evidence below completed I1B only.</p>
+</section>
+
+<section id="completed-result"><h2>Completed result and command-level evidence</h2>
+<table><thead><tr><th>Gate</th><th>Sanitized outcome</th></tr></thead><tbody>
+  <tr><td>Tool integrity and versions</td><td><strong>PASS.</strong> The exact approved tool archives matched their recorded SHA-256 checksums. Assertions matched Temurin JDK <code>17.0.19+10</code>, Android command-line tools <code>19.0</code>, platform-tools <code>37.0.0</code>, API 36 revision <code>2</code>, and Build Tools <code>36.0.0</code>.</td></tr>
+  <tr><td>Pre-device prerequisite</td><td><strong>PASS.</strong> Completed I1B-R1 strict online, offline replay, forced-offline build, dependency-lock, native/assembled, APK, repository-scan, scanner-self-test, frozen-legacy, dormant-iOS, documentation, and diff gates remained accepted.</td></tr>
+  <tr><td>Target selection</td><td><strong>PASS.</strong> Exactly one wired user-authorized device was present. No other, unauthorized, offline, or wireless target was detected. No device or host identifier is retained.</td></tr>
+  <tr><td>Connected instrumentation</td><td><strong>PASS.</strong> Hard-offline strict <code>connectedDebugAndroidTest</code> exited 0 with <code>BUILD SUCCESSFUL</code>; exactly one instrumentation test completed.</td></tr>
+  <tr><td>Automatic cleanup</td><td><strong>PASS.</strong> The application and test packages were absent automatically after the connected test. No manual uninstall or data clear was performed.</td></tr>
+  <tr><td>Evidence hygiene</td><td><strong>PASS.</strong> Identifier-bearing ignored outputs were detected only by count, moved reversibly to private restricted storage outside the repository, and a follow-up count found zero matching repository-tree files. No path, content, identifier, raw log, or screenshot is retained here.</td></tr>
+  <tr><td>Offline manual launch</td><td><strong>PASS.</strong> Only the main debug APK was installed for manual verification; the test package remained absent. After the user disabled Wi-Fi and mobile data, a cold explicit <code>MainActivity</code> launch exited 0 with status OK.</td></tr>
+  <tr><td>Foundation and TalkBack</td><td><strong>PASS.</strong> The user reported PASS for all five approved manual foundation/TalkBack checks, including deterministic offline presentation, logical announcements and traversal, reversible focus/navigation, and absence of unexpected controls or prompts.</td></tr>
+  <tr><td>Independent gates</td><td><strong>PASS.</strong> Configured independent verification and review both passed the exact implementation state in this record with no blocking finding.</td></tr>
+</tbody></table>
+</section>
+
+<section id="approval-evidence"><h2>Evidence at approval</h2>
 <ul>
   <li>The clean planning base is <code>fc32989db985a9a42ee3af61afd3b0793c200f47</code>; its tree equals the completed I1A foundation at <code>e14ddad</code>.</li>
   <li>Actual GitHub Actions run <code>29944925149</code> for <code>fc32989</code> completed <strong>FAILURE</strong> in <code>Install and assert pinned Android packages</code>. The toolchain check reached the emulator version probe and reported the expected emulator version <code>36.6.11.0</code>, but the failed installation step prevented build, emulator, ADB, connected-test, and launch evidence. This is current CI evidence, not an I1B or larger-I1 PASS.</li>
-  <li>The local host probe found Java <code>25.0.3</code>, no available <code>adb</code>, <code>emulator</code>, <code>sdkmanager</code>, or <code>avdmanager</code>, and no <code>/dev/kvm</code>. The system Java is not the project-compatible JDK and is not used for the gate.</li>
+  <li>The initial host probe found no compatible project toolchain. The approved checksum-verified JDK 17 and minimal Android SDK packages were subsequently materialized in user-owned storage and passed the I1B-R1 build gate. The system Java remains outside the gate.</li>
   <li>A physical Android phone is available. Its identity, serial, host authorization fingerprint, accounts, contents, and personal data are outside durable evidence.</li>
 </ul>
 </section>
@@ -47,8 +66,8 @@
 
 <section id="execution"><h2>Execution sequence and command boundary</h2>
 <ol>
-  <li>Confirm the exact Git state, clean tracked executable/configuration surface, frozen <code>pam_pan/</code>, dormant <code>apps/ios/</code>, and no unexpected local material before downloading or connecting a device.</li>
-  <li>Download the two approved archives, verify both SHA-256 digests before extraction, install only the minimal SDK packages, and assert every required version. Stop before extraction or use on a checksum mismatch.</li>
+  <li>Confirm the exact accepted I1B-R1 state, executable/configuration diff limited to its three verification-metadata entries, frozen <code>pam_pan/</code>, dormant <code>apps/ios/</code>, and no unexpected local material before connecting a device.</li>
+  <li>Reassert the already materialized JDK and minimal SDK package versions and checksums. Do not download, replace, upgrade, or broaden the toolchain unless a mismatch stops execution and receives fresh approval.</li>
   <li>With session-scoped tool paths active, run from the repository root: <code>python3 scripts/check-native-foundation.py</code>, <code>python3 scripts/check-secrets.py</code>, <code>git diff --exit-code 0512f84 -- pam_pan</code>, and <code>git diff --check</code>.</li>
   <li>From <code>apps/android/</code>, run <code>./gradlew --no-daemon --dependency-verification strict ktlintCheck lintDebug testDebugUnitTest assembleDebug :app:writeReleaseRuntimeLock</code>. Then require no lock drift, run <code>python3 ../../scripts/check-native-foundation.py --require-assembled-android</code>, and run the artifact-only secret scan over <code>app/build/outputs/apk/debug/app-debug.apk</code>.</li>
   <li>Before device work, the user confirms USB debugging, expected-host RSA authorization, safe profile/package state, and absence of any destructive or data-removal prompt. Require exactly one device in authorized <code>device</code> state; stop for zero, multiple, unexpected, offline, or unauthorized targets.</li>
@@ -106,6 +125,6 @@
 </section>
 
 <section id="completion"><h2>Completion and handoff</h2>
-<p>After execution, independent verification and review must evaluate the same exact implementation state before final documentation synchronization. A completed I1B record must contain sanitized tool/version/checksum assertions, command-level outcomes, device-count/authorization outcome without identifiers, connected-test and manual user-observation results, drift checks, and the narrowed remaining blocker. Keep this active plan authoritative until that gated finalization occurs.</p>
+<p>I1B is complete / PASS only for the exact implementation state in this record. The completed <a href="pampan-native-rewrite-i1b-r1.html">I1B-R1 prerequisite</a> remains independently authoritative for dependency authentication. The active <a href="../active/pampan-native-rewrite.html">living specification</a> and <a href="../active/pampan-native-rewrite-roadmap.html">roadmap</a> retain the larger-I1 workstream, which remains <strong>BLOCKED / pending verification</strong> until successful Android emulator evidence and a successful actual GitHub Actions run are recorded. I2–I9 remain inactive and require fresh approval.</p>
 </section>
 </article></main></body></html>
