@@ -45,9 +45,16 @@ java_output = java_version.stderr + java_version.stdout
 if not re.search(r'openjdk version "17\.0\.19(?:[+\"]|$)', java_output):
     errors.append("expected exact OpenJDK 17.0.19 runtime")
 
-emulator_binary = sdk_root / "emulator/emulator"
-if not emulator_binary.is_file() or not os.access(emulator_binary, os.X_OK):
-    errors.append("Android emulator executable is missing or not executable")
+emulator_version = subprocess.run(
+    [str(sdk_root / "emulator/emulator"), "-version"],
+    capture_output=True,
+    text=True,
+    check=False,
+)
+if "Android emulator version 36.6.11.0" not in (
+    emulator_version.stdout + emulator_version.stderr
+):
+    errors.append("expected Android emulator 36.6.11.0")
 
 if errors:
     print("Android toolchain check failed:")

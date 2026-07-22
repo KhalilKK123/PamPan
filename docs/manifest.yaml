@@ -16,7 +16,6 @@ documentation:
     - docs/handover/changelog.html
     - docs/planning/active/pampan-native-rewrite.html
     - docs/planning/active/pampan-native-rewrite-roadmap.html
-    - docs/planning/active/pampan-native-rewrite-i1b.html
   completed_documents:
     - docs/planning/completed/pampan-rewrite-spec.html
     - docs/planning/completed/pampan-rewrite-spec-i1-roadmap.html
@@ -26,20 +25,17 @@ work:
   active:
     - id: PAMPAN-NATIVE-REWRITE
       title: Android native rewrite
-      status: "I1A complete / PASS; I1B approved and active; larger Android foundation I1 BLOCKED pending exact-state runtime, TalkBack, actual CI, verification, and review evidence"
+      status: "I1A complete / PASS; larger Android foundation I1 BLOCKED pending runtime, accessibility, and actual CI evidence"
       spec: docs/planning/active/pampan-native-rewrite.html
       roadmap: docs/planning/active/pampan-native-rewrite-roadmap.html
-      increment: I1B
-      increment_status: "approved / pending execution; larger I1 remains BLOCKED until one exact executable state passes actual CI, API 36 emulator boot, connected tests, assisted TalkBack, configured verification, and configured review"
-      base_commit: e14ddad236b78d20708de71a09a489c98c30dd4f
+      increment: I1
+      increment_status: "implemented and review-remediated; I1A complete / PASS; BLOCKED pending Android emulator launch, connected tests, TalkBack, and actual GitHub Actions evidence"
+      base_commit: 0512f84
       last_verified_commit: null
-      evidence: "I1A complete / PASS for I1A@0512f84/worktree-2d120810/index-e3b0c442/untracked-37221eae. Commit e14ddad236b78d20708de71a09a489c98c30dd4f captures the foundation and is local, clean, one commit ahead of origin/main, and unpushed at I1B activation. No actual-CI, successful emulator-boot, connected-test, or manual TalkBack result is yet recorded for I1B."
-      blocker: "I1B external/manual evidence remains pending. Larger I1 cannot PASS until the exact candidate is normally pushed, its exact GitHub Actions run and API 36 emulator/connected tests pass, assisted TalkBack passes on the same executable, and configured verification/review pass the same state. I2-I9 remain inactive."
+      evidence: "I1A complete / PASS for I1A@0512f84/worktree-2d120810/index-e3b0c442/untracked-37221eae: configured implement_verify PASS and implement_review PASS on the same state. Android-only CI/validators; redacted scanner self-test, full repository/index/history/ref scan, generated APK scan, strict offline ktlint/lint/unit/assemble/release-lock, assembled boundary, docs/diff/legacy/dependency-lock checks all PASS. Protected iOS and Android app-source hashes were unchanged; gates edited no tracked files."
+      blocker: "The larger I1 remains BLOCKED / pending verification: no successful offline emulator launch, connected tests, manual TalkBack/accessibility result, or actual GitHub Actions run is recorded. I2-I9 are inactive and require fresh approval."
       relevant_paths: "SECURITY.md; docs/reference/public-repository-security.html; apps/android/ (only active native application); apps/ios/ (preserved dormant, no active gate); supabase/ and contracts/ (reserved only); .github/workflows/foundation.yml; scripts/check-native-foundation.py; scripts/check-secrets.py; pam_pan/ (must remain unchanged from 0512f84)"
       standing_constraint: "Public repository: no secrets or sensitive data in source, docs, tests, fixtures, examples, CI configuration/output, artifacts, signing material, local configuration intended for commit, or Git history. Audit and report only redacted evidence."
-      active_increment_plan: docs/planning/active/pampan-native-rewrite-i1b.html
-      candidate_commit: e14ddad236b78d20708de71a09a489c98c30dd4f
-      publication_state: "pending normal non-force push; origin/main was 0512f84b71f22f2a48eb3ac756ab79d4a8036202 at activation"
       last_completed_increment: I1A
       last_verified_state: I1A@0512f84/worktree-2d120810/index-e3b0c442/untracked-37221eae
       completed_record: docs/planning/completed/pampan-native-rewrite-i1a.html
