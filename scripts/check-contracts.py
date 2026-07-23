@@ -26,7 +26,17 @@ ITEM_KEYS = {"id", "name", "quantity", "unit", "expiryDate", "categoryId"}
 QUANTITY_PATTERN = re.compile(
     r"^\+?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
 )
-UNIT_PATTERN = re.compile(r"^(?:\S|\S(?:[\s\S]*\S)?)$")
+CONTRACT_WHITESPACE = (
+    r"\u0009-\u000D\u0020\u0085\u00A0\u1680\u2000-\u200A"
+    r"\u2028-\u2029\u202F\u205F\u3000\uFEFF"
+)
+NONBLANK_PATTERN = re.compile(
+    rf"^[\s\S]*[^{CONTRACT_WHITESPACE}][\s\S]*$"
+)
+UNIT_PATTERN = re.compile(
+    rf"^(?:[^{CONTRACT_WHITESPACE}]|"
+    rf"[^{CONTRACT_WHITESPACE}][\s\S]*[^{CONTRACT_WHITESPACE}])$"
+)
 DATE_PATTERN = re.compile(
     r"^(?!0000)[0-9]{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])$"
 )
@@ -73,7 +83,7 @@ def require_exact_keys(
 
 
 def validate_nonblank(value: Any, location: str, errors: list[str]) -> None:
-    if not isinstance(value, str) or not value.strip():
+    if not isinstance(value, str) or not NONBLANK_PATTERN.fullmatch(value):
         errors.append(f"{location} must be a nonblank string")
 
 
@@ -214,7 +224,7 @@ def validate_schema_shape(schema: Any) -> list[str]:
     if definitions.get("nonblank") != {
         "type": "string",
         "minLength": 1,
-        "pattern": r".*\S.*",
+        "pattern": NONBLANK_PATTERN.pattern,
     }:
         errors.append("schema nonblank definition does not match validator semantics")
     if definitions.get("quantity", {}).get("type") != "string":
@@ -267,6 +277,14 @@ def run_negative_cases(canonical: dict[str, Any]) -> list[str]:
         ("blank category name", lambda value: value["categories"][0].update(name="")),
         ("blank item id", lambda value: value["items"][0].update(id="\t")),
         ("blank item name", lambda value: value["items"][0].update(name=" ")),
+        (
+            "unicode blank category id",
+            lambda value: value["categories"][0].update(id="\u0085"),
+        ),
+        (
+            "unicode blank item name",
+            lambda value: value["items"][0].update(name="\ufeff"),
+        ),
         ("malformed date", lambda value: value["items"][0].update(expiryDate="2026-8-15")),
         ("invalid date", lambda value: value["items"][0].update(expiryDate="2026-02-30")),
         ("negative quantity", lambda value: value["items"][0].update(quantity="-1")),
@@ -274,6 +292,14 @@ def run_negative_cases(canonical: dict[str, Any]) -> list[str]:
         ("numeric quantity", lambda value: value["items"][0].update(quantity=1)),
         ("blank unit", lambda value: value["items"][0].update(unit=" ")),
         ("untrimmed unit", lambda value: value["items"][0].update(unit=" kg")),
+        (
+            "unicode untrimmed unit prefix",
+            lambda value: value["items"][0].update(unit="\ufeffkg"),
+        ),
+        (
+            "unicode untrimmed unit suffix",
+            lambda value: value["items"][0].update(unit="kg\u0085"),
+        ),
         (
             "unresolved category",
             lambda value: value["items"][0].update(categoryId="category-missing"),
@@ -358,7 +384,7 @@ def main() -> int:
 
     print(
         "Pantry contract v1 validation passed "
-        "(canonical fixture, 18 negative cases, and 6 decimal spellings)."
+        "(canonical fixture, 22 negative cases, and 6 decimal spellings)."
     )
     return 0
 

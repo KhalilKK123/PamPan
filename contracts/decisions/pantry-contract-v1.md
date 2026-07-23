@@ -17,6 +17,13 @@ migration contract.
   encode them as strings to avoid binary floating-point loss.
 - Units are required trimmed, nonblank, case-preserving free-form strings.
 
+For portable v1 validation, “whitespace” is the explicit Unicode White_Space set
+U+0009–U+000D, U+0020, U+0085, U+00A0, U+1680, U+2000–U+200A, U+2028–U+2029,
+U+202F, U+205F, and U+3000, plus U+FEFF. IDs and names must contain at least one
+character outside this set. A unit is trimmed only when its first and last
+characters are outside this set. Whitespace inside otherwise valid text remains
+case-preserved free-form content.
+
 The canonical fixture preserves declaration order only to make the preview
 deterministic. This does not define general pantry ordering.
 

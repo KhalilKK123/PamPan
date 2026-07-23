@@ -38,6 +38,12 @@ class PantryContractTest {
             PantryCategory(id = "category-produce", name = "")
         }
         assertThrows(IllegalArgumentException::class.java) {
+            PantryCategory(id = "\u0085", name = "Produce")
+        }
+        assertThrows(IllegalArgumentException::class.java) {
+            PantryCategory(id = "category-produce", name = "\uFEFF")
+        }
+        assertThrows(IllegalArgumentException::class.java) {
             item(id = " ")
         }
         assertThrows(IllegalArgumentException::class.java) {
@@ -47,8 +53,22 @@ class PantryContractTest {
             item(unit = " kg")
         }
         assertThrows(IllegalArgumentException::class.java) {
+            item(unit = "\uFEFFkg")
+        }
+        assertThrows(IllegalArgumentException::class.java) {
+            item(unit = "kg\u0085")
+        }
+        assertThrows(IllegalArgumentException::class.java) {
             item(categoryId = "")
         }
+        assertThrows(IllegalArgumentException::class.java) {
+            item(expiryDate = LocalDate.of(0, 1, 1))
+        }
+        assertThrows(IllegalArgumentException::class.java) {
+            item(expiryDate = LocalDate.of(10000, 1, 1))
+        }
+        PantryCategory(id = "category\u0085produce", name = "Pro\uFEFFduce")
+        item(unit = "fluid\u0085ounces")
     }
 
     @Test
@@ -107,13 +127,14 @@ class PantryContractTest {
         name: String = "Item",
         quantity: PantryDecimal = PantryContract.parseQuantity("1"),
         unit: String = "kg",
+        expiryDate: LocalDate = LocalDate.of(2026, 8, 15),
         categoryId: String = "category-produce",
     ) = PantryItem(
         id = id,
         name = name,
         quantity = quantity,
         unit = unit,
-        expiryDate = LocalDate.of(2026, 8, 15),
+        expiryDate = expiryDate,
         categoryId = categoryId,
     )
 }

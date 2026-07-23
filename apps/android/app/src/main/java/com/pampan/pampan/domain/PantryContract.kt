@@ -7,10 +7,25 @@ import java.time.format.DateTimeParseException
 object PantryContract {
     const val VERSION = "1"
 
+    private val contractWhitespace =
+        Regex(
+            "[\\u0009-\\u000D\\u0020\\u0085\\u00A0\\u1680\\u2000-\\u200A" +
+                "\\u2028-\\u2029\\u202F\\u205F\\u3000\\uFEFF]",
+        )
     private val expiryDatePattern =
         Regex("^(?!0000)[0-9]{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])$")
 
     fun parseQuantity(value: String): PantryDecimal = PantryDecimal.parse(value)
+
+    fun isNonblankText(value: String): Boolean =
+        value.any { character ->
+            !contractWhitespace.matches(character.toString())
+        }
+
+    fun isTrimmedUnit(value: String): Boolean =
+        isNonblankText(value) &&
+            !contractWhitespace.matches(value.first().toString()) &&
+            !contractWhitespace.matches(value.last().toString())
 
     fun parseExpiryDate(value: String): LocalDate {
         require(expiryDatePattern.matches(value)) {
@@ -51,8 +66,8 @@ data class PantryCategory(
     val name: String,
 ) {
     init {
-        require(id.isNotBlank()) { "Category ID must be nonblank." }
-        require(name.isNotBlank()) { "Category name must be nonblank." }
+        require(PantryContract.isNonblankText(id)) { "Category ID must be nonblank." }
+        require(PantryContract.isNonblankText(name)) { "Category name must be nonblank." }
     }
 }
 
@@ -65,12 +80,15 @@ data class PantryItem(
     val categoryId: String,
 ) {
     init {
-        require(id.isNotBlank()) { "Item ID must be nonblank." }
-        require(name.isNotBlank()) { "Item name must be nonblank." }
-        require(unit.isNotBlank() && unit == unit.trim()) {
+        require(PantryContract.isNonblankText(id)) { "Item ID must be nonblank." }
+        require(PantryContract.isNonblankText(name)) { "Item name must be nonblank." }
+        require(PantryContract.isTrimmedUnit(unit)) {
             "Unit must be trimmed and nonblank."
         }
-        require(categoryId.isNotBlank()) { "Category ID must be nonblank." }
+        require(expiryDate.year in 1..9999) {
+            "Expiry date must use a four-digit year."
+        }
+        require(PantryContract.isNonblankText(categoryId)) { "Category ID must be nonblank." }
     }
 }
 
