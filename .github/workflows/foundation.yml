@@ -16,6 +16,7 @@ jobs:
           fetch-depth: 0
       - run: git cat-file -e 0512f84^{commit}
       - run: python3 scripts/check-docs.py
+      - run: python3 scripts/check-contracts.py
       - run: python3 scripts/check-native-foundation.py
       - run: python3 scripts/check-secrets.py
       - name: Scan maintained dependency manifests for known vulnerabilities
@@ -56,7 +57,7 @@ jobs:
           yes | sdkmanager --licenses > /dev/null
           sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
           python3 ../../scripts/check-android-toolchain.py
-      - run: ./gradlew --no-daemon --dependency-verification strict ktlintCheck lintDebug testDebugUnitTest assembleDebug :app:writeReleaseRuntimeLock
+      - run: ./gradlew --no-daemon --dependency-verification strict ktlintCheck lintDebug testDebugUnitTest assembleDebug assembleDebugAndroidTest :app:writeReleaseRuntimeLock
       - run: git diff --exit-code -- app/runtime-dependencies/gradle.lockfile
       - run: python3 ../../scripts/check-native-foundation.py --require-assembled-android
       - run: python3 ../../scripts/check-secrets.py --artifact-only --artifact app/build/outputs/apk/debug/app-debug.apk

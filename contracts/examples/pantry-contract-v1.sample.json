@@ -1,0 +1,43 @@
+{
+  "contractVersion": "1",
+  "categories": [
+    {
+      "id": "category-produce",
+      "name": "Produce"
+    },
+    {
+      "id": "category-dairy",
+      "name": "Dairy"
+    },
+    {
+      "id": "category-pantry",
+      "name": "Pantry staples"
+    }
+  ],
+  "items": [
+    {
+      "id": "item-green-apples",
+      "name": "Green apples",
+      "quantity": "6",
+      "unit": "pieces",
+      "expiryDate": "2026-08-15",
+      "categoryId": "category-produce"
+    },
+    {
+      "id": "item-plain-yogurt",
+      "name": "Plain yogurt",
+      "quantity": "1.5",
+      "unit": "kg",
+      "expiryDate": "2026-08-04",
+      "categoryId": "category-dairy"
+    },
+    {
+      "id": "item-brown-rice",
+      "name": "Brown rice",
+      "quantity": "2.25",
+      "unit": "kg",
+      "expiryDate": "2027-01-30",
+      "categoryId": "category-pantry"
+    }
+  ]
+}

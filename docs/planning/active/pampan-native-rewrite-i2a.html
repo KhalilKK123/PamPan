@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PAMPAN-NATIVE-REWRITE I2A — offline pantry contract preview</title>
+  <link rel="stylesheet" href="../../assets/docs-style.css">
+</head>
+<body><main><article>
+<!-- DOC-NAV:START --><nav class="doc-nav" aria-label="Documentation"><a href="../../../index.html">Portal</a> · <a href="../../../README.md">README</a> · <a href="../../README.md">Docs guide</a> · <a href="../../reference/system-overview.html">System overview</a> · <a href="../../reference/startup-and-verification.html">Verification</a> · <a href="../../handover/current.html">Current handover</a> · <a href="../../handover/changelog.html">Changelog</a></nav><!-- DOC-NAV:END -->
+<h1>PAMPAN-NATIVE-REWRITE / I2A</h1>
+<p class="meta"><strong>Type:</strong> approved active increment plan · <strong>Authority:</strong> exact user-approved I2A scope · <strong>Feature:</strong> PAMPAN-NATIVE-REWRITE · <strong>Increment:</strong> I2A · <strong>Status:</strong> approved / active; implementation not yet verified · <strong>Planning base:</strong> <code>44a77789015cc19968bc609589a966ab0f6b9bf6</code> · <strong>Planning tree:</strong> <code>b1fa6769a3d5847e6d3cee7b7717ef0681c08066</code> · <strong>Updated:</strong> 2026-07-23</p>
+<p class="callout"><strong>Offline contract preview only.</strong> I2A defines a minimal pantry contract, validates fixed synthetic fixtures, and presents those fixtures in the Android application without persistence, authentication, network, cloud, mutation, background work, or relative-date behavior. It does not activate the remainder of I2 or I3–I9.</p>
+
+<section id="objective"><h2>Objective and approved outcome</h2>
+<p>Establish the first narrow individual-pantry contract and a deterministic Android preview that can be verified entirely offline. A cold launch shows the heading <strong>“Pantry preview”</strong>, a prominent <strong>“Sample data — not saved”</strong> status, and exactly three fixed synthetic pantry items. Each item shows its name, decimal quantity with unit, exact expiry date, and category. The fixtures appear in their stable declared order only. A separately defined and tested empty state establishes the zero-item presentation.</p>
+<p>The preview is sample-only evidence of the approved local contract. It is not stored user data, a migration result, a cloud schema, or a claim that CRUD, authentication, synchronization, or the later product workflow exists.</p>
+</section>
+
+<section id="contract"><h2>Minimal contract</h2>
+<table><thead><tr><th>Field or relationship</th><th>Required rule</th><th>Explicitly absent</th></tr></thead><tbody>
+  <tr><td>Item ID</td><td>Required opaque, nonblank identifier. Consumers compare and carry it as an identifier; they do not infer structure or meaning.</td><td>No owner, timestamp, ordering, or deletion semantics.</td></tr>
+  <tr><td>Item name</td><td>Required nonblank name.</td><td>No normalization, uniqueness, length limit, search, or sorting rule.</td></tr>
+  <tr><td>Category ID</td><td>Required opaque, nonblank identifier.</td><td>No owner, hierarchy, global taxonomy, mutation, or deletion behavior.</td></tr>
+  <tr><td>Category name</td><td>Required nonblank name.</td><td>No normalization, uniqueness, length limit, search, or sorting rule.</td></tr>
+  <tr><td>Expiry date</td><td>Required real calendar date encoded exactly as ISO <code>YYYY-MM-DD</code>. Calendar-invalid dates and noncanonical forms are rejected.</td><td>No timestamp, timezone, relative date, “expired”, or “near expiry” calculation.</td></tr>
+  <tr><td>Quantity</td><td>Required nonnegative arbitrary-precision decimal. Fixtures encode it as a JSON string so validation and Kotlin mapping do not introduce binary floating-point loss. Zero is valid.</td><td>No maximum, fixed scale, rounding, arithmetic, valuation, or conversion rule.</td></tr>
+  <tr><td>Unit</td><td>Required trimmed, nonblank, case-preserving free-form text.</td><td>No canonical unit catalog, normalization, pluralization, or conversion.</td></tr>
+  <tr><td>Category relationship</td><td>Every item refers to its category by category ID, and fixture validation rejects a missing category reference.</td><td>No relationship by display name and no dependent-item deletion rule.</td></tr>
+</tbody></table>
+<p>The schema, validator, fixtures, Kotlin model, UI mapping, and tests must express the same contract. Any extra field or semantic rule requires fresh approval.</p>
+</section>
+
+<section id="fixture-and-ui"><h2>Synthetic fixture and Android presentation</h2>
+<ul>
+  <li>Define exactly three fixed, entirely synthetic pantry items and their synthetic categories. Do not derive them from production, personal, legacy, device, or service data.</li>
+  <li>Fixture order is stable declaration order solely to make the preview deterministic. It does not establish a general pantry ordering or sorting contract.</li>
+  <li>On offline cold launch, the Android screen shows <strong>“Pantry preview”</strong> as its heading and <strong>“Sample data — not saved”</strong> as a prominent, accessible status.</li>
+  <li>Each of the three fixture items exposes name, exact quantity and case-preserved unit, literal ISO expiry date, and resolved category name. Dates are not rewritten as relative prose.</li>
+  <li>Define and test the empty state using the same screen/model boundary with zero items. The empty state must not imply a loading, network, account, or persistence failure.</li>
+  <li>Keep the presentation usable with TalkBack and at 200% text without hiding, truncating beyond comprehension, or making the sample-only status ambiguous.</li>
+</ul>
+</section>
+
+<section id="planned-scope"><h2>Planned implementation scope</h2>
+<ol>
+  <li>Add a versioned, machine-validated contract/schema and fixed synthetic fixtures under the existing reserved <code>contracts/</code> boundary, plus a deterministic validator for the exact rules above.</li>
+  <li>Add matching Kotlin domain/fixture mapping in <code>apps/android/</code> without a new dependency, service, permission, network path, persistence layer, or lock change.</li>
+  <li>Replace the foundation-only Android presentation with the approved offline pantry preview and defined empty state.</li>
+  <li>Add focused contract, fixture, Kotlin model, UI, empty-state, accessibility, and cold-launch/connected tests needed to prove the approved behavior.</li>
+  <li>Update only documentation that must describe the implemented and verified state after the implementation gates pass.</li>
+</ol>
+<p>The implementation agent must determine the smallest repository-conforming file set. This plan does not authorize broad refactoring, dependency upgrades, build-system redesign, CI policy changes, or unrelated cleanup.</p>
+</section>
+
+<section id="acceptance-gates"><h2>Acceptance gates</h2>
+<h3>Contract and implementation consistency</h3>
+<ul>
+  <li>The contract/schema/fixture validator accepts all three canonical fixtures and rejects representative violations of every required rule: blank IDs or names, malformed or calendar-invalid dates, negative or non-decimal quantities, non-string fixture quantities, blank or untrimmed units, and unresolved category IDs.</li>
+  <li>Kotlin models and parsing/mapping preserve opaque IDs, case-preserved units, exact decimal values, exact dates, and category-by-ID relationships without adding semantics.</li>
+  <li>Android unit/UI tests prove the exact heading, prominent sample-only status, three complete item presentations in fixture order, literal dates, and the defined empty state.</li>
+  <li>No new dependency, dependency-verification entry, lock selection, runtime permission, network permission, service, provider, or background component is introduced; the committed dependency and lock surfaces remain unchanged.</li>
+</ul>
+<h3>Local static, build, security, scope, and documentation gate</h3>
+<ul>
+  <li>Run the existing contract validator and its negative test vectors.</li>
+  <li>Run the repository’s pinned Android formatting/static analysis, lint, unit tests, debug assembly, release-lock generation, dependency verification/lock no-drift, native and assembled audits, generated APK scan, and relevant UI-test build/preparation gates.</li>
+  <li>Run scanner self-tests and redacted repository/index/history/ref and generated-artifact security checks. Use synthetic fixtures only and publish no sensitive values.</li>
+  <li>Prove Android-only scope, dormant <code>apps/ios/</code>, unchanged reserved <code>supabase/</code>, and frozen <code>pam_pan/</code> at <code>0512f84</code>. Prove no excluded behavior or unrelated drift.</li>
+  <li>Run <code>python3 scripts/update-doc-navigation.py</code>, <code>python3 scripts/check-docs.py</code>, and the repository diff/scope checks.</li>
+</ul>
+<h3>Fresh exact-state physical-phone gate</h3>
+<p>Because I2A intentionally changes protected Android behavior, prior I1B evidence cannot carry forward. On the exact final implementation state, and only under a freshly approved physical-phone session, verify:</p>
+<ul>
+  <li>the approved connected Android tests pass on exactly one user-authorized wired phone;</li>
+  <li>with network connectivity disabled, a cold launch succeeds and presents the complete deterministic preview with no network, authentication, service, or persistence dependency;</li>
+  <li>TalkBack exposes the heading, sample-only status, item details, categories, and empty-state meaning in a coherent order without ambiguous unlabeled content;</li>
+  <li>at 200% text, both populated and empty states remain readable and operable without clipped essential information;</li>
+  <li>evidence is sanitized: retain no device serial, host fingerprint, private path, personal data, screenshot, or raw/broad log.</li>
+</ul>
+<h3>Independent final gates and authorized remote action</h3>
+<ul>
+  <li><code>implement_verify</code> and <code>implement_review</code> must both return PASS for the same exact implementation-state identifier after local and physical-phone evidence is complete.</li>
+  <li>Only after every pre-push gate passes, one non-force final branch push is authorized to produce one static-only GitHub Actions run at the exact final head.</li>
+  <li>The one run must pass all retained static analysis, unit, build/assembly, dependency-verification/lock, native-audit, APK/repository-security, documentation, and scope gates for that same commit/tree. Hosted emulator/system-image/AVD/ADB/connected/runtime/TalkBack work remains excluded and superseded in CI.</li>
+</ul>
+</section>
+
+<section id="exclusions"><h2>Explicit exclusions</h2>
+<ul>
+  <li>No item or category create, edit, delete, or other mutation; no dependent-item deletion semantics.</li>
+  <li>No local persistence, cache, database, drafts, queued writes, sync, or conflict behavior.</li>
+  <li>No sorting, filtering, search, user-selectable ordering, unit conversion, quantity arithmetic, or near-expiry/expired calculation.</li>
+  <li>No dashboard, calendar, navigation expansion, reminder, notification, barcode, camera, AI, recipe, map, shelter, donation, payment, record, leaderboard, XP, widget, or other optional legacy feature.</li>
+  <li>No Supabase initialization, SDK, Auth, schema, migration, RLS, cloud project, Storage, Realtime, Edge Function, server contract, network call, or credential/configuration work.</li>
+  <li>No runtime permissions, signing, release, store, distribution, or legacy-data migration work.</li>
+  <li>No iOS implementation, build, test, verification, release, deletion, or rewrite. No <code>pam_pan/</code> change.</li>
+</ul>
+</section>
+
+<section id="invariants"><h2>Standing invariants and evidence limits</h2>
+<ul>
+  <li>Android remains the only active native application. <code>apps/ios/</code> remains dormant, <code>pam_pan/</code> remains frozen at <code>0512f84</code>, and <code>supabase/</code> remains unchanged and reserved.</li>
+  <li>I1/I1E remains complete / PASS only for its historical exact state and revised static-only policy. I1C remains failed / BLOCKED historical evidence; I1D remains Diagnostic PASS only. I2A does not rewrite any prior result.</li>
+  <li>The repository is public. Fixtures and test vectors are synthetic. Reports retain categorical results, exact repository state, and safe digests only; they do not retain sensitive device identifiers, private host paths, personal data, raw logs, screenshots, or suspected values.</li>
+  <li>Static or source inspection cannot establish runtime, connected-test, TalkBack, or 200%-text acceptance. Those claims require the approved exact-state physical-phone gate.</li>
+  <li>I2 remainder and I3–I9 remain inactive. Any contract expansion, additional product behavior, cloud work, persistence, mutation, navigation, optional feature, or release activity requires fresh approval.</li>
+</ul>
+</section>
+
+<section id="stop-conditions"><h2>Stop conditions</h2>
+<ul>
+  <li>Stop on contract ambiguity, schema/Kotlin/UI divergence, fixture data that is not demonstrably synthetic, dependency or lock drift, new permission/service/network behavior, or scope outside this plan.</li>
+  <li>Stop if the exact implementation state changes after phone evidence or either independent gate; repeat the affected gate only under fresh authorization where required.</li>
+  <li>Stop if the physical-phone gate cannot be performed safely without retaining identifiers or broad/raw logs. Do not substitute a hosted emulator or inference.</li>
+  <li>Stop on suspected disclosure without reproducing the value; follow the private escalation and provider revocation/rotation boundary.</li>
+  <li>Stop after the one authorized GitHub Actions run fails. No rerun, second push, force-push, amendment, alternate remote mutation, release, or expanded remediation is approved by I2A.</li>
+</ul>
+</section>
+
+<section id="completion-rule"><h2>Completion rule</h2>
+<p>I2A remains approved / active until the contract, validator, fixtures, matching Kotlin implementation, populated and empty Android states, complete local gate, fresh exact-state physical-phone evidence, same-state <code>implement_verify</code> PASS, same-state <code>implement_review</code> PASS, one authorized static-only GitHub Actions run, and final documentation synchronization all pass. A partial result must be recorded as partial, failed, or blocked without activating the I2 remainder or I3–I9.</p>
+<p>See the <a href="pampan-native-rewrite.html">living specification</a>, <a href="pampan-native-rewrite-roadmap.html">roadmap</a>, <a href="../../handover/current.html">current handover</a>, and <a href="../../reference/public-repository-security.html">public-repository security boundary</a>.</p>
+</section>
+</article></main></body></html>
