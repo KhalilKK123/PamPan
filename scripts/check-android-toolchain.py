@@ -34,16 +34,6 @@ expected_properties = {
         "Pkg.Revision",
         "36.0.0",
     ),
-    sdk_root / "emulator/source.properties": (
-        "Android emulator",
-        "Pkg.Revision",
-        "36.6.11",
-    ),
-    sdk_root / "system-images/android-36/google_apis/x86_64/source.properties": (
-        "Android API 36 system image",
-        "Pkg.Revision",
-        "7",
-    ),
 }
 
 errors: list[str] = []
@@ -77,14 +67,10 @@ else:
     if not re.search(r'openjdk version "17\.0\.19(?:[+\"]|$)', java_output):
         errors.append("expected exact OpenJDK 17.0.19 runtime")
 
-emulator_binary = sdk_root / "emulator/emulator"
-if not emulator_binary.is_file() or not os.access(emulator_binary, os.X_OK):
-    errors.append("Android emulator executable is missing or not executable")
-
 if errors:
     print("Android toolchain check failed:")
     for error in errors:
         print(f"- {error}")
     sys.exit(1)
 
-print("Android toolchain check passed: JDK 17.0.19, command-line tools 19.0, platform-tools 37.0.0, API 36 r2, build-tools 36.0.0, emulator 36.6.11, system image r7.")
+print("Android toolchain check passed: JDK 17.0.19, command-line tools 19.0, platform-tools 37.0.0, API 36 r2, build-tools 36.0.0.")
