@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PAMPAN-NATIVE-REWRITE I1C — Android CI and emulator recovery</title>
+  <link rel="stylesheet" href="../../assets/docs-style.css">
+</head>
+<body><main><article>
+<!-- DOC-NAV:START --><nav class="doc-nav" aria-label="Documentation"><a href="../../../index.html">Portal</a> · <a href="../../../README.md">README</a> · <a href="../../README.md">Docs guide</a> · <a href="../../reference/system-overview.html">System overview</a> · <a href="../../reference/startup-and-verification.html">Verification</a> · <a href="../../handover/current.html">Current handover</a> · <a href="../../handover/changelog.html">Changelog</a></nav><!-- DOC-NAV:END -->
+<h1>PAMPAN-NATIVE-REWRITE / I1C</h1>
+<p class="meta"><strong>Type:</strong> completed historical blocked-attempt record · <strong>Authority:</strong> user-approved scope plus sanitized exact-run evidence · <strong>Feature:</strong> PAMPAN-NATIVE-REWRITE · <strong>Increment:</strong> I1C · <strong>Status:</strong> failed / BLOCKED historical evidence · <strong>Exact state:</strong> <code>I1C@d4c52928f8645701fdf1e77ea6083ec65e876282/tree-84957ee3ec564c9e2fdaa8ff6b98e73934959d93/run-29968898510</code> · <strong>Planning base:</strong> <code>57f6532d2781d247ef65cb05516fa421356a96b3</code> · <strong>Updated:</strong> 2026-07-23</p>
+<p class="callout"><strong>Single authorized attempt exhausted.</strong> The one approved commit, push, and actual GitHub Actions run occurred. The run completed FAILURE: actual-CI evidence is FAIL and emulator evidence is FAIL because API 36 boot was not established. I1C is preserved as historical evidence and authorizes no further action. The completed <a href="pampan-native-rewrite-i1d.html">I1D diagnostic record</a> preserves the later bounded probe; the active <a href="../active/pampan-native-rewrite-i1e.html">I1E plan</a> supersedes hosted-emulator acceptance without retroactively passing I1C.</p>
+
+<section id="outcome"><h2>Approved outcome</h2>
+<p>On one exact new commit derived from <code>57f6532d2781d247ef65cb05516fa421356a96b3</code>, recover the existing offline API 36 emulator path with the smallest CI/toolchain-checker correction, then push that one commit once to the new work branch to trigger exactly one actual GitHub Actions run. A single successful run may close the two remaining larger-I1 gates, but the evidence fields remain logically separate: successful emulator evidence and successful actual-CI evidence.</p>
+<p>If the run fails, stop and preserve only sanitized categorical evidence. A rerun, second push, privileged remediation, or expanded correction requires fresh approval. Never rerun the old commit: it predates the accepted I1B-R1 dependency-verification metadata now present in the planning base.</p>
+</section>
+
+<section id="blocked-attempt"><h2>Blocked attempt evidence</h2>
+<p>Exactly one push-triggered run was associated with commit <code>d4c52928f8645701fdf1e77ea6083ec65e876282</code>; the completed run head SHA matched that commit. The public run record is <a href="https://github.com/KhalilKK123/PamPan/actions/runs/29968898510">GitHub Actions run 29968898510</a>.</p>
+<table><thead><tr><th>Evidence field</th><th>Sanitized result</th></tr></thead><tbody>
+  <tr><td>Exact implementation/run state</td><td><code>I1C@d4c52928f8645701fdf1e77ea6083ec65e876282/tree-84957ee3ec564c9e2fdaa8ff6b98e73934959d93/run-29968898510</code>.</td></tr>
+  <tr><td>Overall actual CI</td><td><strong>FAIL.</strong> Run completed FAILURE.</td></tr>
+  <tr><td><code>docs-and-security</code></td><td><strong>SUCCESS.</strong></td></tr>
+  <tr><td>Android job</td><td><strong>FAILURE.</strong></td></tr>
+  <tr><td>Successful Android prerequisites</td><td>Pinned package/toolchain assertions; strict Gradle ktlint, lint, unit, debug assembly, and release-lock checks; dependency-lock no-drift; assembled-native audit; and APK redacted scan all completed successfully before the failure.</td></tr>
+  <tr><td>Emulator step</td><td><strong>FAIL.</strong> Acceleration was unavailable; the non-privileged software fallback was selected; the emulator process exited before ADB registration.</td></tr>
+  <tr><td>API 36 boot</td><td><strong>Not established.</strong></td></tr>
+  <tr><td>Hard-offline connected test</td><td><strong>Not reached.</strong> Test count was not established.</td></tr>
+  <tr><td>Activity/foundation assertion</td><td><strong>Not established.</strong></td></tr>
+  <tr><td>Configured final gates</td><td><code>implement_verify</code>: <strong>FINAL FAIL</strong>; <code>implement_review</code>: <strong>FINAL FAIL</strong>, both for the exact state above.</td></tr>
+</tbody></table>
+<p>This record supports only the categorical sequence above. It does not establish why the emulator process exited, and it must not be used to infer a root cause. No raw log, private path, device, host, or runner identifier is retained.</p>
+</section>
+
+<section id="diagnosis"><h2>Bounded diagnosis and confidence</h2>
+<p>Actual GitHub Actions run <code>29944925149</code> on <code>fc32989</code> failed in <code>Install and assert pinned Android packages</code>. The checker reached the expected emulator <code>36.6.11.0</code> probe, but the step stopped before build, emulator boot, ADB, connected-test, or activity-launch evidence.</p>
+<p><strong>Confidence:</strong> local history strongly identifies the emulator binary execution and exact-output probe as the brittle failure family. The exact suffix, process behavior, and runner-specific manifestation remain uncertain because no sanitized raw transcript was retained. This is a bounded diagnosis, not a reconstructed fact.</p>
+</section>
+
+<section id="scope"><h2>Approved executable scope</h2>
+<p>Executable changes are limited to <code>.github/workflows/foundation.yml</code> and <code>scripts/check-android-toolchain.py</code>.</p>
+<ol>
+  <li><strong>Install-stage checker:</strong> retain every exact SDK package, revision, and <code>source.properties</code> assertion. Confirm the emulator binary exists and is executable without launching it during package-install assertions.</li>
+  <li><strong>Emulator step:</strong> harden only the existing path with bounded ADB and boot waits, emulator-process PID cleanup, a non-privileged acceleration preflight, supported headless software rendering, and sanitized categorical failures.</li>
+  <li><strong>Existing test authority:</strong> leave <code>FoundationScreenTest</code> unchanged. Its existing instrumentation supplies the activity launch and deterministic-foundation assertion.</li>
+</ol>
+<p>Planning, handover, portal/navigation, and later verified evidence documentation may change as required by the Universal Doc OS. Documentation must not describe emulator or CI success before the actual same-state evidence exists.</p>
+</section>
+
+<section id="sequence"><h2>Execution sequence</h2>
+<ol>
+  <li>Begin from clean base commit <code>57f6532d2781d247ef65cb05516fa421356a96b3</code>. Confirm the accepted three-entry dependency-verification boundary, completed I1A/I1B-R1/I1B records, frozen legacy tree, dormant iOS tree, and unchanged Android application/test/Gradle trees.</li>
+  <li>Apply only the approved checker and workflow correction. Do not run the emulator from the install-stage checker.</li>
+  <li>Run the complete local native, security, strict Android build, audit, APK, frozen-boundary, dependency-lock, documentation, and diff gates listed in the exit gate. Sanitize all evidence.</li>
+  <li>Create one exact implementation commit derived from the planning base. Record its commit SHA, tree, approved changed paths, protected blob hashes, and three-entry metadata boundary. Review and verify the exact local state required by the implementation workflow before any remote action.</li>
+  <li>Push that one commit once to <code>work/pampan-i1c-ci-emulator-recovery</code>. The push is authorized only to trigger one new actual GitHub Actions run; do not amend or make a second push.</li>
+  <li>Observe the one resulting run. On failure, record categorical evidence and stop. On success, record overall and per-job results, the emulator/connected-test result, test count, and activity-foundation conclusion without raw logs or runner identifiers.</li>
+  <li>Require configured independent verification and review to PASS the same exact commit and run before I1C or either remaining larger-I1 evidence field is closed. Synchronize completion documentation only to evidence actually established.</li>
+</ol>
+</section>
+
+<section id="remote-boundary"><h2>Remote-action boundary</h2>
+<ul>
+  <li>The one authorized push of the exact reviewed commit to the named work branch has occurred and is exhausted.</li>
+  <li>The one authorized actual GitHub Actions run triggered by that push has occurred and completed FAILURE.</li>
+  <li>No rerun of run <code>29944925149</code>, no manual rerun of the new run, no second push, no amend-and-force-push, no extra trigger, and no pull request, merge, release, or other remote mutation is authorized.</li>
+  <li>No further remote action is authorized by I1C. The separately approved I1D plan has its own independent history, remote, and evidence budget.</li>
+</ul>
+</section>
+
+<section id="exclusions"><h2>Explicit exclusions</h2>
+<ul>
+  <li>No application source or test edit, including no <code>FoundationScreenTest</code> change.</li>
+  <li>No Gradle script, wrapper, dependency, lock, or verification-metadata edit; preserve the accepted exact three-entry I1B-R1 boundary and add no fourth trust entry.</li>
+  <li>No iOS action; <code>apps/ios/</code> remains dormant. No <code>pam_pan/</code> change from <code>0512f84</code>.</li>
+  <li>No physical-phone use, ADB authorization, wireless debugging, or local evidence quarantine.</li>
+  <li>No Supabase, product, cloud, signing, release, migration, schema, service, permission, or I2–I9 work.</li>
+  <li>No <code>sudo</code>, global installation, KVM permission mutation, privileged runner mutation, history rewrite, raw-log upload, or durable private path, device identifier, host identifier, or runner identifier.</li>
+</ul>
+</section>
+
+<section id="stop-conditions"><h2>Stop conditions and risks</h2>
+<ul>
+  <li>Stop if the correction needs a file outside the approved workflow/checker/docs paths, changes application/test/Gradle behavior, weakens an exact toolchain assertion, or expands the dependency trust boundary.</li>
+  <li>Stop on unexpected executable drift, Android application/test/Gradle tree drift, frozen-legacy drift, dormant-iOS drift, lock drift, a fourth verification-metadata entry, or any failed local gate.</li>
+  <li>Stop if emulator recovery appears to require privileged acceleration or permission mutation, unsupported flags, network access during the hard-offline test, unbounded waiting, or unsanitized diagnostics.</li>
+  <li>Stop after any new-run failure. Record the failed step family and categorical outcome only; do not rerun, push a correction, or broaden diagnostics without fresh approval.</li>
+  <li>A suspected disclosure invokes the <a href="../../reference/public-repository-security.html">public-repository stop condition</a>. Do not reproduce the value; escalate privately for revocation or rotation and redacted re-verification.</li>
+</ul>
+</section>
+
+<section id="evidence"><h2>Required sanitized evidence record</h2>
+<table><thead><tr><th>Field</th><th>Required record</th></tr></thead><tbody>
+  <tr><td>Planning base</td><td><code>57f6532d2781d247ef65cb05516fa421356a96b3</code>; tree <code>ff059e015bea5fcdb119549561bc7bb83e62c37e</code>.</td></tr>
+  <tr><td>Implementation identity</td><td><code>d4c52928f8645701fdf1e77ea6083ec65e876282</code>; tree <code>84957ee3ec564c9e2fdaa8ff6b98e73934959d93</code>; branch <code>work/pampan-i1c-ci-emulator-recovery</code>.</td></tr>
+  <tr><td>Protected boundaries</td><td>Before/after blob or tree hashes for Android application source, tests, Gradle/build/dependency/lock metadata, dormant iOS, and frozen legacy; exact three-entry verification-metadata count.</td></tr>
+  <tr><td>Toolchain and runner contract</td><td>Pinned image/tool/package versions and categorical assertion results; no private runner path or runner identifier.</td></tr>
+  <tr><td>Local gate</td><td>Categorical result for each exit-gate command family, lock no-drift, APK scan, docs validation, and diff/scope checks.</td></tr>
+  <tr><td>Remote identity</td><td>Exactly one push-triggered <a href="https://github.com/KhalilKK123/PamPan/actions/runs/29968898510">run 29968898510</a>; completed head SHA matched the exact implementation commit.</td></tr>
+  <tr><td>Actual CI</td><td><strong>FAIL:</strong> overall FAILURE; <code>docs-and-security</code> SUCCESS; Android job FAILURE.</td></tr>
+  <tr><td>Emulator and application</td><td><strong>FAIL:</strong> acceleration unavailable, non-privileged software fallback selected, process exited before ADB registration, and API 36 boot not established. Hard-offline connected testing was not reached; test count and activity/foundation assertion were not established.</td></tr>
+  <tr><td>Independent gates</td><td><code>implement_verify</code> and <code>implement_review</code> both returned <strong>FINAL FAIL</strong> for the exact implementation/run state.</td></tr>
+</tbody></table>
+<p>Durable evidence may contain only sanitized commit, tree, run, and protected-blob identifiers or a public run URL; categorical step results; pinned tool/image versions; test count; and conclusions. Do not preserve raw logs, private paths, device/host/runner identifiers, environment dumps, or suspected sensitive values.</p>
+</section>
+
+<section id="exit-gate"><h2>Exact I1C exit gate</h2>
+<p><strong>I1C is complete / PASS only when all conditions below apply to one exact new commit and its one attributable actual GitHub Actions run:</strong></p>
+<ul>
+  <li>the diff is limited to the approved workflow, checker, and documentation paths; the Android application source, tests, and Gradle/build/dependency/lock tree are unchanged from completed I1B;</li>
+  <li>the accepted exact three-entry dependency-verification metadata boundary is preserved with no fourth trust entry;</li>
+  <li>native-foundation, public-repository security and full redacted scans, scanner self-test, frozen legacy, dormant iOS, dependency-lock no-drift, strict Android ktlint/lint/unit/debug assembly/release-lock, native and assembled audits, APK scan, documentation validation, and diff/scope checks all pass;</li>
+  <li>the exact pushed commit SHA/tree and protected-boundary hashes are recorded, and exactly one new run is attributable to that commit;</li>
+  <li>the overall run and both jobs succeed;</li>
+  <li>the pinned API 36 emulator boots without privileged mutation using the approved bounded waits and supported headless software rendering;</li>
+  <li>network is disabled for the hard-offline strict <code>connectedDebugAndroidTest</code>, the connected test passes, and the unchanged activity-launch test asserts the deterministic foundation;</li>
+  <li>configured independent verification and review both PASS the same exact commit and run.</li>
+</ul>
+<p>If the emulator succeeds but the overall run or another job does not, only the emulator evidence field may be marked PASS. Actual CI remains failed, I1C is not complete, and the larger I1 remains BLOCKED. No success may be inferred from a partial or unobserved field.</p>
+</section>
+
+<section id="status-boundary"><h2>Status and authority boundary</h2>
+<p>I1C is <strong>failed / BLOCKED historical evidence</strong>. Actual-CI evidence is FAIL; emulator evidence is FAIL; no connected-test count or activity/foundation result was established. <a href="pampan-native-rewrite-i1d.html">I1D</a> later completed / PASS for Diagnostic PASS only; Recovery PASS was not achieved. The approved I1E policy intentionally withdraws hosted-emulator verification from current larger-I1 acceptance rather than declaring I1C passed. Completed I1A, I1B-R1, and I1B remain PASS only at their recorded exact states. Larger I1 remains BLOCKED under the I1E exit gate. I2–I9 remain inactive and require fresh approval.</p>
+<p>See the <a href="../active/pampan-native-rewrite.html">living specification</a>, <a href="../active/pampan-native-rewrite-roadmap.html">roadmap</a>, <a href="../active/pampan-native-rewrite-i1e.html">active I1E plan</a>, and <a href="../../handover/current.html">current handover</a> for the active workstream and safe resume point.</p>
+</section>
+</article></main></body></html>
