@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PAMPAN-NATIVE-REWRITE I1D — sanitized emulator diagnosis and recovery probe</title>
+  <link rel="stylesheet" href="../../assets/docs-style.css">
+</head>
+<body><main><article>
+<!-- DOC-NAV:START --><nav class="doc-nav" aria-label="Documentation"><a href="../../../index.html">Portal</a> · <a href="../../../README.md">README</a> · <a href="../../README.md">Docs guide</a> · <a href="../../reference/system-overview.html">System overview</a> · <a href="../../reference/startup-and-verification.html">Verification</a> · <a href="../../handover/current.html">Current handover</a> · <a href="../../handover/changelog.html">Changelog</a></nav><!-- DOC-NAV:END -->
+<h1>PAMPAN-NATIVE-REWRITE / I1D</h1>
+<p class="meta"><strong>Type:</strong> active approved increment plan · <strong>Authority:</strong> user-approved future work · <strong>Feature:</strong> PAMPAN-NATIVE-REWRITE · <strong>Increment:</strong> I1D · <strong>Status:</strong> approved / not started · <strong>Planning base:</strong> <code>d4c52928f8645701fdf1e77ea6083ec65e876282</code> · <strong>Planning-base tree:</strong> <code>84957ee3ec564c9e2fdaa8ff6b98e73934959d93</code> · <strong>Predecessor:</strong> I1C BLOCKED / failed single authorized run · <strong>Updated:</strong> 2026-07-23</p>
+<p class="callout"><strong>Diagnosis first; one evidence-backed recovery probe.</strong> I1D is not an approved root-cause fix. It may change only the existing Android workflow, produce a closed sanitized launch matrix, and use one final push-triggered run to determine either a full recovery result or a bounded diagnostic result. The larger I1 remains <strong>BLOCKED / pending verification</strong> unless the recovery gate genuinely passes.</p>
+
+<section id="outcome"><h2>Approved outcome</h2>
+<p>Replace the disproven forced <code>-accel off</code> fallback with documented <code>-accel auto</code>, preserve supported software graphics and the existing bounded/offline safety controls, and collect exactly six literal-only emulator/test fields. The run is a recovery probe and a sanitized diagnosis surface, not permission to infer a root cause from hidden output.</p>
+<p>I1D may end in one of two distinct passing outcomes:</p>
+<ul>
+  <li><strong>Recovery PASS:</strong> the entire run succeeds, the API 36 emulator boots, exactly one unchanged connected activity/foundation test passes, and the configured final verification and review gates pass the same exact commit/tree/run.</li>
+  <li><strong>Diagnostic PASS:</strong> the run fails only during emulator startup, all six sanitized fields are complete and valid, and the configured final gates pass I1D specifically as a diagnostic result. Larger I1 remains BLOCKED; no recovery is claimed.</li>
+</ul>
+<p>A missing field, unrelated job failure, post-boot connected-test failure, disclosure, or failed final gate makes I1D FAIL / BLOCKED.</p>
+</section>
+
+<section id="rationale"><h2>Official rationale</h2>
+<ul>
+  <li><a href="https://docs.github.com/en/actions/reference/runners/github-hosted-runners">GitHub-hosted runners reference</a> states that GitHub-hosted Linux runners support hardware acceleration for Android SDK tools.</li>
+  <li><a href="https://developer.android.com/studio/run/emulator-acceleration">Android emulator hardware-acceleration guidance</a> states that Linux VM acceleration uses KVM and requires sufficient access permissions.</li>
+  <li><a href="https://developer.android.com/studio/run/emulator-commandline">Android emulator command-line guidance</a> defines <code>-accel auto</code> as the default automatic selection mode and <code>-accel off</code> as primarily useful for debugging.</li>
+  <li><a href="https://developer.android.com/studio/run/emulator-extended-controls">Android emulator graphics controls</a> documents software graphics as a supported mode that selects software rendering drivers for the AVD and requested features.</li>
+</ul>
+<p>These primary sources justify testing the emulator's supported automatic acceleration selection with software graphics. They do not prove why the I1C process exited and do not authorize runner, KVM, package, image, OS, or architecture mutation.</p>
+</section>
+
+<section id="scope"><h2>Approved executable scope</h2>
+<p>The only executable file that may change later is <code>.github/workflows/foundation.yml</code>.</p>
+<ol>
+  <li>Replace the I1C forced <code>-accel off</code> fallback with documented <code>-accel auto</code>.</li>
+  <li>Retain <code>-gpu software</code>, bounded ADB-registration and Android-boot waits, emulator PID cleanup, no snapshots, no window, no audio, no boot animation, and radio disablement before the unchanged strict offline connected test.</li>
+  <li>Redirect <code>avdmanager</code>, acceleration-check, and emulator standard output and standard error to runner-temporary files used only as sinks. Never print, read back, tail, grep output from, hash, upload, or preserve those raw files.</li>
+  <li>Derive only the approved categorical process/timeout results from shell status and bounded control flow. Validate every emitted value against its literal allowlist before reporting it.</li>
+  <li>Emit the six validated fields through GitHub notices and a short step summary. Do not emit any other host or emulator diagnostic detail.</li>
+</ol>
+<p>No checker, application, test, manifest, Gradle, wrapper, dependency, lock, verification-metadata, package pin, system-image, OS, or architecture change is authorized.</p>
+</section>
+
+<section id="matrix"><h2>Closed sanitized evidence matrix</h2>
+<table><thead><tr><th>Field</th><th>Exact allowed values</th><th>Derivation boundary</th></tr></thead><tbody>
+  <tr><td><code>kvm-device</code></td><td><code>present-accessible</code> · <code>present-inaccessible</code> · <code>absent</code></td><td>Existence and non-mutating accessibility checks only; never report ownership, mode, user, or group.</td></tr>
+  <tr><td><code>acceleration-probe</code></td><td><code>pass</code> · <code>fail</code></td><td>Acceleration-check shell status only; its redirected output is never read or emitted.</td></tr>
+  <tr><td><code>emulator-process</code></td><td><code>running</code> · <code>exited-zero</code> · <code>exited-nonzero</code> · <code>terminated-by-signal</code></td><td>PID liveness and shell wait status class only.</td></tr>
+  <tr><td><code>adb-registration</code></td><td><code>reached</code> · <code>deadline</code></td><td>Bounded target-registration control flow; never print <code>adb devices</code> or identifiers.</td></tr>
+  <tr><td><code>android-boot</code></td><td><code>complete</code> · <code>deadline</code> · <code>process-exit</code></td><td>Bounded boot-property/control-flow result only.</td></tr>
+  <tr><td><code>connected-test</code></td><td><code>pass</code> · <code>fail</code> · <code>not-reached</code></td><td>Unchanged strict offline connected-test outcome only.</td></tr>
+</tbody></table>
+<p>Every run path must assign all six fields, validate them against these exact allowlists, and emit only <code>key=value</code> literals. Missing, empty, additional, reordered, or out-of-allowlist evidence is an I1D failure.</p>
+</section>
+
+<section id="canonical-hash"><h2>Canonical six-field hash</h2>
+<p>For post-run identity, construct one UTF-8, LF-delimited record in the exact field order shown below, with no whitespace around <code>=</code> and one final LF:</p>
+<pre><code>kvm-device=&lt;allowed-value&gt;
+acceleration-probe=&lt;allowed-value&gt;
+emulator-process=&lt;allowed-value&gt;
+adb-registration=&lt;allowed-value&gt;
+android-boot=&lt;allowed-value&gt;
+connected-test=&lt;allowed-value&gt;
+</code></pre>
+<p>Record the SHA-256 digest of exactly those canonical bytes with the final commit, tree, and run identifiers. The digest supplements rather than replaces the six visible literal fields. No raw-output file, path, environment value, or runner detail may enter the canonical record.</p>
+</section>
+
+<section id="output-safety"><h2>Output and privacy boundary</h2>
+<ul>
+  <li>Never print, read back, tail, grep output from, hash, upload, artifact, or preserve redirected <code>avdmanager</code>, acceleration-check, or emulator output.</li>
+  <li>Never output file ownership or mode, user/group, CPU, kernel, runner, environment, SDK path, AVD path, device identifier, host identifier, or <code>adb devices</code>.</li>
+  <li>Never enable verbose emulator, kernel, logcat, environment, process-table, or host diagnostic output.</li>
+  <li>GitHub notices and the short step summary may contain only the six literal fields, their canonical SHA-256 digest, and ordinary categorical gate conclusions.</li>
+  <li>A suspected disclosure invokes the public-repository stop condition and makes I1D FAIL / BLOCKED pending private response and fresh approval.</li>
+</ul>
+</section>
+
+<section id="sequence"><h2>Execution and commit sequence</h2>
+<ol>
+  <li><strong>Docs planning/result-capture commit:</strong> review and commit the preserved I1C failed-run synchronization together with this approved I1D planning capture as the first local commit.</li>
+  <li><strong>Workflow commit:</strong> after the docs gate passes, implement only the approved workflow change and pass the complete local exit gate. Create the second and final local commit.</li>
+  <li><strong>Same-state gates:</strong> verify the final two-commit head, protected trees, exact diff, workflow syntax, and output-safety contract before any remote action.</li>
+  <li><strong>Single remote attempt:</strong> make exactly one non-force push containing both local commits to <code>work/pampan-i1d-emulator-diagnosis</code>. Exactly one push-triggered run at the final head is authorized.</li>
+  <li><strong>Concurrent final gates:</strong> record the exact final commit/tree/run and canonical six-field hash, then run configured verification and review concurrently against that same state and classify the result as Recovery PASS, Diagnostic PASS, or FAIL / BLOCKED.</li>
+  <li><strong>Local result synchronization:</strong> update durable result documentation locally. Do not commit or push those final result docs unless separately authorized later.</li>
+</ol>
+</section>
+
+<section id="remote-budget"><h2>History and remote budget</h2>
+<ul>
+  <li>Exactly two local commits are authorized in the stated order: documentation planning/result capture first, workflow second.</li>
+  <li>Exactly one non-force push of both commits together to the new branch is authorized, producing exactly one push-triggered run at the final head.</li>
+  <li>No pull request, rerun, dispatch, force-push, second push, amendment, merge, release, or other remote mutation is authorized.</li>
+  <li>If the final head, commit count/order, push attribution, or run association is ambiguous, stop before further remote action.</li>
+  <li>After a run failure, stop. No correction or additional probe is authorized.</li>
+</ul>
+</section>
+
+<section id="local-gate"><h2>Local pre-push exit gate</h2>
+<p>The final two-commit head may be pushed only when all applicable checks below pass without a phone or local emulator:</p>
+<ul>
+  <li>workflow YAML parses and every extracted Bash block passes syntax validation;</li>
+  <li>a static output-safety audit proves closed literal allowlists, total assignment of all six fields, no raw-output readback or publication, no forbidden host/runner detail, and the canonical hash contract;</li>
+  <li>documentation navigation/validation, native-foundation validation, scanner self-test, and full redacted repository/index/history/ref scan pass;</li>
+  <li>strict offline Android ktlint, lint, unit tests, debug assembly, and release-lock generation pass;</li>
+  <li>dependency-lock no-drift, assembled-native audit, and generated-APK redacted scan pass;</li>
+  <li>diff/scope checks prove only the approved docs and workflow path changed, <code>pam_pan/</code> remains frozen from <code>0512f84</code>, protected Android application/test/Gradle/dependency trees and dormant iOS are unchanged, and the exact three-entry verification-metadata boundary is preserved;</li>
+  <li>no phone, ADB authorization, local emulator, global installation, privilege mutation, or system action occurs.</li>
+</ul>
+</section>
+
+<section id="post-run-gate"><h2>Post-run classification gate</h2>
+<table><thead><tr><th>Outcome</th><th>Required evidence</th><th>Larger-I1 effect</th></tr></thead><tbody>
+  <tr><td><strong>Recovery PASS</strong></td><td>Exact final commit/tree/run and canonical six-field hash recorded; entire run and all required jobs succeed; <code>android-boot=complete</code>; <code>connected-test=pass</code>; exactly one unchanged connected activity/foundation test passes; configured verification and review both PASS the same exact state.</td><td>The emulator and actual-CI fields may close. Larger I1 may pass only if every remaining gate agrees.</td></tr>
+  <tr><td><strong>Diagnostic PASS</strong></td><td>The run fails only during emulator startup; all six fields are present, allowlisted, internally consistent, and hashed canonically; no unrelated failure or disclosure occurs; configured verification and review both PASS I1D as a diagnostic result for the same exact state.</td><td>I1D diagnostic objective passes, but emulator and actual-CI recovery do not. Larger I1 remains BLOCKED.</td></tr>
+  <tr><td><strong>FAIL / BLOCKED</strong></td><td>Any field missing or invalid; unrelated job failure; emulator boots but the connected test fails; test count/activity assertion is not exactly the approved unchanged test; disclosure; identity mismatch; or either final gate fails.</td><td>Larger I1 remains BLOCKED. No correction, push, or new run without fresh approval.</td></tr>
+</tbody></table>
+</section>
+
+<section id="exclusions"><h2>Explicit exclusions</h2>
+<ul>
+  <li>No edit to <code>scripts/check-android-toolchain.py</code>, application source, tests, manifests, Gradle files, wrapper, dependencies, locks, verification metadata, package pins, system image, runner OS, or architecture.</li>
+  <li>No fourth verification-metadata trust entry; preserve the accepted exact three-entry I1B-R1 boundary.</li>
+  <li>No iOS action; <code>apps/ios/</code> remains dormant. No <code>pam_pan/</code> change.</li>
+  <li>No physical phone, local emulator, ADB authorization, <code>sudo</code>, KVM permission mutation, global installation, paid or alternate runner, or third-party emulator action.</li>
+  <li>No raw logs, artifacts, screenshots, private paths, host/device/runner identifiers, environment dumps, or expanded diagnostics.</li>
+  <li>No Supabase, product, cloud, signing, release, migration, permission, schema, service, or I2–I9 work.</li>
+</ul>
+</section>
+
+<section id="stop-conditions"><h2>Stop conditions</h2>
+<ul>
+  <li>Stop before push on any local gate failure, scope ambiguity, protected-tree drift, verification-metadata drift, output-safety ambiguity, or inability to prove the exact two-commit history.</li>
+  <li>Stop if evidence appears to require KVM permission mutation, a different runner, OS, image, package, system architecture, privileged action, or expanded executable scope.</li>
+  <li>Stop on suspected disclosure without reproducing the value; follow the public-repository incident boundary.</li>
+  <li>Stop after the one run fails. Record only the allowed matrix and categorical conclusions; do not correct, rerun, dispatch, or push again.</li>
+</ul>
+</section>
+
+<section id="status-boundary"><h2>Status and authority boundary</h2>
+<p>I1D is approved future work and has no implementation or run evidence at planning capture. I1C remains the active blocked predecessor record for its exhausted failed run. Completed I1A, I1B-R1, and I1B remain PASS only for their recorded exact states. The larger I1 remains BLOCKED pending genuine successful emulator and actual-CI evidence. I2–I9 remain inactive and require fresh approval.</p>
+<p>See the <a href="pampan-native-rewrite-i1c.html">I1C blocked predecessor</a>, <a href="pampan-native-rewrite.html">living specification</a>, <a href="pampan-native-rewrite-roadmap.html">roadmap</a>, and <a href="../../handover/current.html">current handover</a>.</p>
+</section>
+</article></main></body></html>

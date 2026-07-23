@@ -17,6 +17,7 @@ documentation:
     - docs/planning/active/pampan-native-rewrite.html
     - docs/planning/active/pampan-native-rewrite-roadmap.html
     - docs/planning/active/pampan-native-rewrite-i1c.html
+    - docs/planning/active/pampan-native-rewrite-i1d.html
   completed_documents:
     - docs/planning/completed/pampan-rewrite-spec.html
     - docs/planning/completed/pampan-rewrite-spec-i1-roadmap.html
@@ -28,19 +29,24 @@ work:
   active:
     - id: PAMPAN-NATIVE-REWRITE
       title: Android native rewrite
-      status: "I1C approved / not started; I1A, I1B-R1, and physical-device I1B remain complete / PASS at recorded states; larger Android foundation I1 remains BLOCKED"
+      status: "I1D approved / not started; I1C remains BLOCKED after its failed single authorized run; I1A, I1B-R1, and physical-device I1B remain complete / PASS at recorded states; larger Android foundation I1 remains BLOCKED"
       spec: docs/planning/active/pampan-native-rewrite.html
       roadmap: docs/planning/active/pampan-native-rewrite-roadmap.html
-      increment: I1C
-      increment_plan: docs/planning/active/pampan-native-rewrite-i1c.html
-      increment_status: "APPROVED / not started; recover the existing API 36 emulator CI path and make exactly one authorized work-branch push/run attempt; larger I1 remains BLOCKED pending successful emulator and actual-CI evidence"
-      base_commit: 57f6532d2781d247ef65cb05516fa421356a96b3
+      increment: I1D
+      increment_plan: docs/planning/active/pampan-native-rewrite-i1d.html
+      increment_status: "APPROVED / not started; diagnosis-first auto-mode recovery probe with distinct Recovery PASS and Diagnostic PASS outcomes; larger I1 remains BLOCKED"
+      base_commit: d4c52928f8645701fdf1e77ea6083ec65e876282
+      base_tree: 84957ee3ec564c9e2fdaa8ff6b98e73934959d93
       last_verified_commit: null
-      evidence: "I1B complete / PASS for I1B@9c6fa158f0e463d5b45844e3cd72511548387c10/worktree-a8387e8235d92963a8705dd6124b68aa5e895f893672f06c2b92a052318c5654/index-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/untracked-dd1cad3463e6b1cd65f5ae7af052011bd7c53f216672bee40bf8f6aa58e3fbf5. Exact tool integrity/version assertions, one authorized wired target, hard-offline strict connected test, automatic package cleanup, offline cold launch, all five approved manual foundation/TalkBack checks, evidence hygiene, and same-state independent verification/review passed. I1B-R1 remains complete / PASS. Actual GitHub Actions run 29944925149 remains FAILURE before build/runtime evidence."
-      blocker: "Larger I1 remains BLOCKED pending successful Android emulator evidence and a successful actual GitHub Actions run. I1C is approved but has no implementation or remote evidence yet. I2-I9 remain inactive and require fresh approval."
+      evidence: "I1C@d4c52928f8645701fdf1e77ea6083ec65e876282/tree-84957ee3ec564c9e2fdaa8ff6b98e73934959d93/run-29968898510: exactly one push-triggered run; completed FAILURE with matching head SHA; docs-and-security SUCCESS; Android job FAILURE; pinned toolchain, strict Gradle checks, dependency-lock no-drift, assembled audit, and APK scan succeeded before emulator-step failure; acceleration unavailable, non-privileged software fallback selected, emulator exited before ADB registration; API 36 boot, connected-test count, and activity/foundation assertion not established; implement_verify and implement_review FINAL FAIL. I1B, I1B-R1, and I1A remain PASS only at recorded states."
+      blocker: "I1D is approved but has no implementation or run evidence. I1C remains BLOCKED with actual-CI and emulator FAIL. Larger I1 remains BLOCKED pending genuine successful Android emulator evidence and a successful actual GitHub Actions run. I2-I9 remain inactive."
       relevant_paths: "SECURITY.md; docs/reference/public-repository-security.html; apps/android/ (only active native application); apps/ios/ (preserved dormant, no active gate); supabase/ and contracts/ (reserved only); .github/workflows/foundation.yml; scripts/check-android-toolchain.py; scripts/check-native-foundation.py; scripts/check-secrets.py; pam_pan/ (must remain unchanged from 0512f84)"
       standing_constraint: "Public repository: no secrets or sensitive data in source, docs, tests, fixtures, examples, CI configuration/output, artifacts, signing material, local configuration intended for commit, or Git history. Audit and report only redacted evidence."
       last_completed_increment: I1B
+      blocked_predecessor: docs/planning/active/pampan-native-rewrite-i1c.html
+      blocked_predecessor_state: I1C@d4c52928f8645701fdf1e77ea6083ec65e876282/tree-84957ee3ec564c9e2fdaa8ff6b98e73934959d93/run-29968898510
+      approved_executable_scope: .github/workflows/foundation.yml
+      approved_history_remote_budget: "exactly two local commits (documentation first, workflow second), one non-force push of both together, and one push-triggered run at final head; no PR, rerun, dispatch, force-push, or second push"
       last_verified_state: I1B@9c6fa158f0e463d5b45844e3cd72511548387c10/worktree-a8387e8235d92963a8705dd6124b68aa5e895f893672f06c2b92a052318c5654/index-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/untracked-dd1cad3463e6b1cd65f5ae7af052011bd7c53f216672bee40bf8f6aa58e3fbf5
       completed_record: docs/planning/completed/pampan-native-rewrite-i1b.html
       execution_base_tree: "Physical-device I1B passed without executable drift beyond the accepted I1B-R1 three-entry verification-metadata change; larger I1 remains blocked on emulator and successful actual-CI evidence"
