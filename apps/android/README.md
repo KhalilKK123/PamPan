@@ -20,9 +20,9 @@ Android is the only active native application. I1A is complete / PASS; iOS is ou
 ./gradlew connectedDebugAndroidTest
 ```
 
-Open this directory in Android Studio for the required manual offline emulator launch and TalkBack check. The application declares no runtime permission and contains no service SDK.
+Open this directory in Android Studio for local inspection. The application declares no runtime permission and contains no service SDK.
 
-The strict offline lint/unit/assembly/release-lock command passed for the recorded I1A state. Connected tests, manual TalkBack, offline emulator launch, and an actual GitHub Actions run remain required before the larger native rewrite I1 can pass.
+The strict offline lint/unit/assembly/release-lock command passed for the recorded I1A state. Physical-device I1B subsequently passed strict connected instrumentation, offline launch, and all approved manual foundation/TalkBack checks for its exact recorded state. Successful API 36 emulator evidence and a successful actual GitHub Actions run remain required before the larger native rewrite I1 can pass; approved I1C has not yet supplied either result.
 
 Future local Android SDK paths belong in ignored `local.properties`. Future service values must use ignored local configuration or CI secrets and must never include a Supabase service-role key.
 

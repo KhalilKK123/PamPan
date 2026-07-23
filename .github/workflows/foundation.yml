@@ -64,9 +64,54 @@ jobs:
       - name: Launch offline emulator and run UI tests
         run: |
           echo no | avdmanager create avd --force --name pampan_ci --package "system-images;android-36;google_apis;x86_64" --device pixel_6
-          nohup emulator -avd pampan_ci -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect -no-snapshot > "$RUNNER_TEMP/emulator.log" 2>&1 &
-          adb wait-for-device
-          timeout 300 bash -c 'until [ "$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d "\r")" = "1" ]; do sleep 5; done'
+          acceleration_mode=off
+          if emulator -accel-check > "$RUNNER_TEMP/emulator-accel-check.log" 2>&1; then
+            acceleration_mode=on
+            echo "Emulator acceleration preflight: available."
+          else
+            echo "Emulator acceleration preflight: unavailable; using the software fallback."
+          fi
+          emulator_args=(
+            -avd pampan_ci
+            -no-window
+            -no-audio
+            -no-boot-anim
+            -gpu software
+            -accel "$acceleration_mode"
+            -no-snapshot
+          )
+          nohup emulator "${emulator_args[@]}" > "$RUNNER_TEMP/emulator.log" 2>&1 &
+          emulator_pid=$!
+          cleanup() {
+            adb emu kill > /dev/null 2>&1 || true
+            kill "$emulator_pid" > /dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+          if ! timeout 180 adb wait-for-device; then
+            if kill -0 "$emulator_pid" 2>/dev/null; then
+              echo "Emulator startup failed: no adb registration before the bounded deadline."
+            else
+              echo "Emulator startup failed: process exited before adb registration."
+            fi
+            exit 1
+          fi
+          boot_completed=false
+          for _ in {1..120}; do
+            if ! kill -0 "$emulator_pid" 2>/dev/null; then
+              echo "Emulator startup failed: process exited before Android boot completed."
+              exit 1
+            fi
+            boot_state=$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d "\r" || true)
+            if [ "$boot_state" = "1" ]; then
+              boot_completed=true
+              break
+            fi
+            sleep 5
+          done
+          if [ "$boot_completed" != true ]; then
+            echo "Emulator startup failed: Android boot did not complete before the bounded deadline."
+            exit 1
+          fi
           adb shell svc wifi disable
           adb shell svc data disable
           ./gradlew --offline --no-daemon --dependency-verification strict connectedDebugAndroidTest
