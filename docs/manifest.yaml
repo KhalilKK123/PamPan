@@ -16,7 +16,6 @@ documentation:
     - docs/handover/changelog.html
     - docs/planning/active/pampan-native-rewrite.html
     - docs/planning/active/pampan-native-rewrite-roadmap.html
-    - docs/planning/active/pampan-native-rewrite-i1e.html
   completed_documents:
     - docs/planning/completed/pampan-rewrite-spec.html
     - docs/planning/completed/pampan-rewrite-spec-i1-roadmap.html
@@ -25,31 +24,34 @@ documentation:
     - docs/planning/completed/pampan-native-rewrite-i1b.html
     - docs/planning/completed/pampan-native-rewrite-i1c.html
     - docs/planning/completed/pampan-native-rewrite-i1d.html
+    - docs/planning/completed/pampan-native-rewrite-i1e.html
 work:
   primary: PAMPAN-NATIVE-REWRITE
   active:
     - id: PAMPAN-NATIVE-REWRITE
       title: Android native rewrite
-      status: "I1E approved / pending implementation; static-only CI acceptance approved; larger Android foundation I1 remains BLOCKED"
+      status: "I1E complete / PASS; larger Android foundation I1 complete / PASS only for the exact verified state under the revised static-only policy; no successor active"
       spec: docs/planning/active/pampan-native-rewrite.html
       roadmap: docs/planning/active/pampan-native-rewrite-roadmap.html
-      increment: I1E
-      increment_plan: docs/planning/active/pampan-native-rewrite-i1e.html
-      increment_status: "approved / pending implementation; larger I1 BLOCKED until workflow/checker implementation, exact successful static-only GitHub Actions run, protected I1B byte equivalence, and configured final verification/review PASS"
+      increment: I1
+      increment_plan: docs/planning/active/pampan-native-rewrite-roadmap.html
+      increment_status: "complete / PASS only at I1E@660a5e39619d036d6b9228a97a18b2e036c44afd/tree-bcfdba270ae6938528de1af63f06244aec9331dc/run-30023752408/protected-82e0e3377b9f302b853ed7c5f3e0d1b0dc4cb5af269a628b5224722f775fb923 under the revised static-only policy"
       base_commit: 67192b97739142cc412b23334957c7d51ca85555
       base_tree: 897c2812f0acc0021b3d0aba84745d63fb86233c
-      last_verified_commit: dd7afd98a64043868afa82b789dded2d3b89005e
-      evidence: "I1E policy approved at clean planning base 67192b97739142cc412b23334957c7d51ca85555/tree-897c2812f0acc0021b3d0aba84745d63fb86233c. GitHub Actions acceptance is static-only; physical phone is the sole runtime/connected/TalkBack surface. I1B evidence may carry forward only by verified byte identity of all protected Android behavior inputs; equivalence-based acceptance is not a retest. I1C remains failed/BLOCKED historical evidence. I1D@dd7afd98a64043868afa82b789dded2d3b89005e/tree-0d590b5ff9abe81f741e98d2b21475565b002036/run-29978593901/diagnostic-1aa5a4fcb4ba7cb7497456549f56e3c58259b6d6b7b788df69c24256a4a23c76 remains complete/PASS for Diagnostic PASS only."
-      blocker: "Larger I1 remains BLOCKED until I1E workflow/checker implementation, one exact successful static-only GitHub Actions run, protected I1B byte equivalence, and configured final verification/review PASS the same state. Hosted-emulator verification is withdrawn/superseded, never retroactively passed. I2-I9 remain inactive."
+      last_verified_commit: 660a5e39619d036d6b9228a97a18b2e036c44afd
+      evidence: "I1E@660a5e39619d036d6b9228a97a18b2e036c44afd/tree-bcfdba270ae6938528de1af63f06244aec9331dc/run-30023752408/protected-82e0e3377b9f302b853ed7c5f3e0d1b0dc4cb5af269a628b5224722f775fb923: complete / PASS. Exact one-push run and both jobs succeeded; every retained static/build/unit/dependency/lock/native/APK/repository gate passed; no hosted emulator/system-image/AVD/KVM/ADB/connected/runtime/TalkBack step existed or ran. All 20 protected Android behavior files excluding README were byte-identical to accepted I1B materialization 57f6532. implement_verify and implement_review FINAL PASS for the same state. Larger I1 complete / PASS only for this exact state and revised policy."
+      blocker: null
       relevant_paths: "SECURITY.md; docs/reference/public-repository-security.html; apps/android/ (only active native application); apps/ios/ (preserved dormant, no active gate); supabase/ and contracts/ (reserved only); .github/workflows/foundation.yml; scripts/check-android-toolchain.py; scripts/check-native-foundation.py; scripts/check-secrets.py; pam_pan/ (must remain unchanged from 0512f84)"
       standing_constraint: "Public repository: no secrets or sensitive data in source, docs, tests, fixtures, examples, CI configuration/output, artifacts, signing material, local configuration intended for commit, or Git history. Audit and report only redacted evidence."
-      active_successor: docs/planning/active/pampan-native-rewrite-i1e.html
-      last_completed_increment: I1D
+      active_successor: null
+      last_completed_increment: I1E
       blocked_predecessor: docs/planning/completed/pampan-native-rewrite-i1c.html
       blocked_predecessor_state: I1C@d4c52928f8645701fdf1e77ea6083ec65e876282/tree-84957ee3ec564c9e2fdaa8ff6b98e73934959d93/run-29968898510
-      last_verified_state: I1D@dd7afd98a64043868afa82b789dded2d3b89005e/tree-0d590b5ff9abe81f741e98d2b21475565b002036/run-29978593901/diagnostic-1aa5a4fcb4ba7cb7497456549f56e3c58259b6d6b7b788df69c24256a4a23c76
-      completed_record: docs/planning/completed/pampan-native-rewrite-i1d.html
-      execution_base_tree: "I1E planning base includes the complete I1D Diagnostic PASS record. I1E may change only the Android workflow and toolchain checker executably; protected Android behavior inputs must remain byte-identical to accepted I1B evidence."
+      last_verified_state: I1E@660a5e39619d036d6b9228a97a18b2e036c44afd/tree-bcfdba270ae6938528de1af63f06244aec9331dc/run-30023752408/protected-82e0e3377b9f302b853ed7c5f3e0d1b0dc4cb5af269a628b5224722f775fb923
+      completed_record: docs/planning/completed/pampan-native-rewrite-i1e.html
+      execution_base_tree: "GitHub Actions and the toolchain checker are static-only. All 20 protected Android behavior files excluding README match accepted I1B bytes; future protected drift requires fresh explicit phone approval."
+      next_increment: null
+      next_action: "No active increment. I2-I9 remain inactive and require fresh user approval."
   completed:
     - id: PAMPAN-REWRITE-SPEC
       title: Repository reverse-engineering and rewrite specification

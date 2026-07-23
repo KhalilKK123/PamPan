@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PAMPAN-NATIVE-REWRITE I1E — completed static-only CI acceptance transition</title>
+  <link rel="stylesheet" href="../../assets/docs-style.css">
+</head>
+<body><main><article>
+<!-- DOC-NAV:START --><nav class="doc-nav" aria-label="Documentation"><a href="../../../index.html">Portal</a> · <a href="../../../README.md">README</a> · <a href="../../README.md">Docs guide</a> · <a href="../../reference/system-overview.html">System overview</a> · <a href="../../reference/startup-and-verification.html">Verification</a> · <a href="../../handover/current.html">Current handover</a> · <a href="../../handover/changelog.html">Changelog</a></nav><!-- DOC-NAV:END -->
+<h1>PAMPAN-NATIVE-REWRITE / I1E</h1>
+<p class="meta"><strong>Type:</strong> completed increment record · <strong>Authority:</strong> exact implementation/run evidence plus configured independent verification and review · <strong>Feature:</strong> PAMPAN-NATIVE-REWRITE · <strong>Increment:</strong> I1E · <strong>Status:</strong> complete / PASS · <strong>Exact state:</strong> <code>I1E@660a5e39619d036d6b9228a97a18b2e036c44afd/tree-bcfdba270ae6938528de1af63f06244aec9331dc/run-30023752408/protected-82e0e3377b9f302b853ed7c5f3e0d1b0dc4cb5af269a628b5224722f775fb923</code> · <strong>Completed:</strong> 2026-07-23</p>
+<p class="callout"><strong>Static-only CI acceptance transition.</strong> GitHub Actions will verify static analysis, unit tests, Android builds and assembly, dependency verification and locks, native audits, generated APK safety, repository security, documentation, and scope invariants. Hosted emulator, system-image, AVD, ADB, connected-test, runtime-launch, and TalkBack gates are withdrawn from CI. A physical phone is the sole runtime, connected-test, and TalkBack verification surface and always requires fresh explicit approval for new device work.</p>
+
+<section id="objective"><h2>Objective and approved outcome</h2>
+<p>Remove the unsupported hosted-emulator acceptance path from Android CI and its toolchain checker while preserving every pre-emulator static, build, dependency, audit, security, and documentation gate. Then use one exact push-triggered static-only GitHub Actions run to establish hosted CI acceptance for the final I1E implementation state.</p>
+<p>This policy supersedes hosted-emulator verification in the current larger-I1 acceptance criteria. It does not retroactively pass I1C, I1D Recovery PASS, or any earlier failed run. I1C remains failed / BLOCKED historical evidence. I1D remains complete / PASS for Diagnostic PASS only.</p>
+</section>
+
+<section id="completed-result"><h2>Completed result</h2>
+<p><strong>I1E complete / PASS; larger PAMPAN-NATIVE-REWRITE I1 complete / PASS under the approved revised static-only policy.</strong> Exactly one push-triggered run matched final commit <code>660a5e39619d036d6b9228a97a18b2e036c44afd</code>, tree <code>bcfdba270ae6938528de1af63f06244aec9331dc</code>, and the approved branch. The overall run, Android job, and documentation/security job succeeded.</p>
+<p>Every retained static analysis, unit-test, build/assembly, dependency-verification and lock, native audit, generated-APK, repository-security, documentation, and scope gate succeeded. No hosted emulator package, system image, AVD, KVM, ADB, connected-test, runtime-launch, or TalkBack step existed or ran. The pinned checkout action emitted a non-blocking Node.js deprecation warning; it did not fail or affect the gate.</p>
+<p>The protected manifest contained all 20 tracked behavior-affecting <code>apps/android/</code> files, excluding only <code>apps/android/README.md</code>. Its canonical digest was <code>82e0e3377b9f302b853ed7c5f3e0d1b0dc4cb5af269a628b5224722f775fb923</code>, and every protected byte was identical to the accepted I1B materialization at <code>57f6532</code>. I1B physical connected-test, offline-launch, and TalkBack evidence therefore carries to the final I1E state by equivalence, not by retest. Any future protected drift requires a freshly and explicitly approved physical-phone gate.</p>
+<p><code>implement_verify</code> returned <strong>FINAL PASS</strong> and <code>implement_review</code> returned <strong>FINAL PASS</strong> for the same exact state. I1C remains failed / BLOCKED historical evidence; I1D remains complete / PASS for Diagnostic PASS only. The full rewrite is not complete: I2–I9 remain inactive and require fresh approval.</p>
+</section>
+
+<section id="acceptance-policy"><h2>Approved acceptance policy</h2>
+<table><thead><tr><th>Surface</th><th>Accepted responsibility</th><th>Boundary</th></tr></thead><tbody>
+  <tr><td>GitHub Actions</td><td>Documentation and security validation; static analysis and formatting; unit tests; debug build/assembly and release-lock generation; exact dependency verification and lock no-drift; native and assembled audits; generated APK and repository/history/index/ref safety scans; frozen-legacy, dormant-iOS, protected-byte, and diff/scope invariants.</td><td>No emulator package or system image, AVD creation, emulator process, ADB, connected test, runtime launch, TalkBack, KVM, or device claim.</td></tr>
+  <tr><td>Physical Android phone</td><td>Runtime launch, connected instrumentation, and manual TalkBack/accessibility evidence.</td><td>Sole approved surface for these claims. Every future device session requires fresh explicit user approval and a separately bounded safety/evidence plan.</td></tr>
+  <tr><td>Local planning and gates</td><td>Static inspection and repository validation needed to prove the exact I1E scope and protected-byte equivalence.</td><td>No phone, ADB authorization, local emulator, system image, AVD, installation, <code>sudo</code>, or host/system mutation.</td></tr>
+</tbody></table>
+</section>
+
+<section id="equivalence"><h2>Physical-device evidence carry-forward by byte equivalence</h2>
+<p>Completed physical-device I1B evidence may be accepted for larger I1 at the final I1E state only if verification proves byte identity for every behavior-affecting Android production, test, manifest, Gradle, wrapper, dependency, lock, and verification-metadata input between the exact accepted I1B state and the final I1E implementation state.</p>
+<p><strong>This is equivalence-based acceptance, not a retest.</strong> The preserved I1B observations remain historical observations of their exact state. The acceptance bridge is valid only because the executable inputs that can affect the foundation runtime and connected/TalkBack behavior are byte-identical.</p>
+<p>The protected set includes:</p>
+<ul>
+  <li><code>apps/android/app/src/main/**</code>, <code>apps/android/app/src/test/**</code>, and <code>apps/android/app/src/androidTest/**</code>, including the application manifest and resources;</li>
+  <li>all Android Gradle build/settings/property and ProGuard inputs, including <code>apps/android/*.gradle.kts</code>, <code>apps/android/gradle.properties</code>, <code>apps/android/app/*.gradle.kts</code>, and <code>apps/android/app/proguard-rules.pro</code>;</li>
+  <li>the Gradle wrapper scripts, properties, and JAR under <code>apps/android/gradlew</code>, <code>apps/android/gradlew.bat</code>, and <code>apps/android/gradle/wrapper/**</code>;</li>
+  <li>all committed dependency locks and <code>apps/android/gradle/verification-metadata.xml</code>.</li>
+</ul>
+<p>Verification must establish the chain from <code>I1B@9c6fa158f0e463d5b45844e3cd72511548387c10/worktree-a8387e8235d92963a8705dd6124b68aa5e895f893672f06c2b92a052318c5654/index-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/untracked-dd1cad3463e6b1cd65f5ae7af052011bd7c53f216672bee40bf8f6aa58e3fbf5</code> through the protected, no-behavior-change I1C/I1D history, the clean I1E planning base, and the final I1E head. Record only path-neutral hashes or categorical equality results; never retain host or device identifiers.</p>
+<p>Any later drift in this protected set invalidates carry-forward for the changed state. Larger-I1 runtime, connected-test, or TalkBack acceptance then requires a freshly approved physical-phone gate; no CI result, source review, or inference can replace it.</p>
+</section>
+
+<section id="executable-scope"><h2>Exact planned executable scope</h2>
+<ol>
+  <li><strong><code>.github/workflows/foundation.yml</code>:</strong> stop installing the Android emulator package and API 36 system image; delete the complete hosted emulator/AVD/ADB/connected-test step; preserve all existing documentation/security and Android gates that execute before the emulator step, including exact pinned static/build/dependency/audit/APK/repository checks.</li>
+  <li><strong><code>scripts/check-android-toolchain.py</code>:</strong> remove emulator-package and system-image requirements, remove the emulator executable/version assertion, and narrow the success message to the remaining pinned Android toolchain. Preserve all other exact version/source-property checks and fail-closed behavior.</li>
+</ol>
+<p>No other executable or behavior-affecting file is authorized to change.</p>
+</section>
+
+<section id="history"><h2>History and remote budget</h2>
+<ol>
+  <li><strong>Commit one — complete:</strong> existing commit <code>67192b97739142cc412b23334957c7d51ca85555</code> durably preserves the complete I1D Diagnostic PASS record.</li>
+  <li><strong>Commit two — this planning capture:</strong> commit only the approved I1E policy/plan and documentation-state transition after the documentation gate passes.</li>
+  <li><strong>Commit three — later implementation:</strong> change only the approved workflow and checker paths after the protected-byte and local gates pass.</li>
+  <li><strong>Final gates:</strong> configured <code>implement_verify</code> and <code>implement_review</code> must PASS the same exact three-commit final implementation state before remote action.</li>
+  <li><strong>Single remote attempt:</strong> after all gates pass, exactly one non-force push of the three commits together to <code>work/pampan-i1e-static-ci-policy</code> is authorized, producing exactly one push-triggered static-only GitHub Actions run at the final head.</li>
+</ol>
+<p>No pull request, rerun, second push, force-push, amendment, dispatch, merge, release, or other remote mutation is authorized. Result documentation after the run remains local unless separately authorized.</p>
+</section>
+
+<section id="local-gate"><h2>Local implementation exit gate</h2>
+<p>Before the final implementation state may be pushed:</p>
+<ul>
+  <li>workflow YAML parses, every retained shell block passes syntax validation, and static inspection proves that no hosted emulator/system-image/AVD/ADB/connected/runtime/TalkBack action remains;</li>
+  <li>the checker accepts only the narrowed pinned toolchain while preserving every other exact assertion and fail-closed path;</li>
+  <li>documentation navigation/validation, scanner self-test, full redacted repository/index/history/ref scan, native-foundation validation, strict dependency-verified Android formatting/lint/unit/assembly/release-lock checks, lock no-drift, assembled audit, APK scan, frozen legacy, and diff/scope checks pass;</li>
+  <li>the protected Android byte set is identical across the I1B equivalence chain and the final I1E head;</li>
+  <li>the exact three-commit history, final commit/tree, and two-file executable diff are unambiguous;</li>
+  <li>configured independent verification and review both PASS that same final state.</li>
+</ul>
+</section>
+
+<section id="post-run-gate"><h2>Static-only actual-CI and larger-I1 exit gate</h2>
+<p>I1E may complete only when the exact final commit/tree is associated with the one authorized push-triggered run, the overall workflow and every required static-only job pass, the protected I1B equivalence chain remains valid, and configured final verification and review PASS the same implementation state.</p>
+<p>The larger I1 remains <strong>BLOCKED / pending verification</strong> until I1E workflow/checker implementation, exact successful static-only GitHub Actions evidence, protected-byte equivalence, and configured final verification/review all pass. Only then may larger I1 be marked complete under the revised policy. Hosted-emulator verification is intentionally withdrawn and superseded, never recorded as passed.</p>
+</section>
+
+<section id="exclusions"><h2>Explicit exclusions</h2>
+<ul>
+  <li>No change to Android application source, test source, manifest, resources, Gradle build/settings/property inputs, wrapper, dependencies, lockfiles, or verification metadata.</li>
+  <li>No iOS work; <code>apps/ios/</code> remains dormant. No <code>pam_pan/</code> change. No I2–I9 activation.</li>
+  <li>No product behavior, Supabase, schema, service, cloud, release, signing, migration, permission, or credential work.</li>
+  <li>No local or physical-phone runtime work, ADB authorization, emulator, system image, AVD, KVM, <code>sudo</code>, installation, global tool change, or system mutation.</li>
+  <li>No raw/private output, host/device/runner identifiers, environment dump, broad diagnostic log, screenshot, or sensitive value.</li>
+</ul>
+</section>
+
+<section id="stop-conditions"><h2>Stop conditions</h2>
+<ul>
+  <li>Stop on any protected-byte drift, unexpected executable path, weakened retained gate, checker fail-open behavior, history ambiguity, or final-gate mismatch.</li>
+  <li>Stop if successful acceptance appears to require a phone, ADB, emulator, system image, AVD, host mutation, broader workflow/checker scope, or a second remote action.</li>
+  <li>Stop on suspected disclosure without reproducing the value; follow the public-repository incident boundary.</li>
+  <li>Stop after the one authorized run fails. No correction, rerun, second push, or alternate remote attempt is approved.</li>
+</ul>
+</section>
+
+<section id="status-boundary"><h2>Status and authority boundary</h2>
+<p>I1E is <strong>complete / PASS</strong> at the exact state above. Larger I1 is <strong>complete / PASS only for that same state under the approved revised static-only policy</strong>. Hosted-emulator acceptance is withdrawn and superseded, never retroactively passed. I1C remains failed / BLOCKED historical evidence, and I1D remains complete / PASS for Diagnostic PASS only. The full rewrite is not complete. I2–I9 remain inactive and require fresh approval.</p>
+<p>See the <a href="../active/pampan-native-rewrite.html">living specification</a>, <a href="../active/pampan-native-rewrite-roadmap.html">roadmap</a>, <a href="pampan-native-rewrite-i1c.html">historical I1C record</a>, <a href="pampan-native-rewrite-i1d.html">completed I1D record</a>, and <a href="../../handover/current.html">current handover</a>.</p>
+</section>
+</article></main></body></html>

@@ -17,12 +17,13 @@ Android is the only active native application. I1A is complete / PASS; iOS is ou
 
 ```bash
 ./gradlew --offline --no-daemon --dependency-verification strict ktlintCheck lintDebug testDebugUnitTest assembleDebug :app:writeReleaseRuntimeLock
-./gradlew connectedDebugAndroidTest
 ```
 
 Open this directory in Android Studio for local inspection. The application declares no runtime permission and contains no service SDK.
 
-The strict offline lint/unit/assembly/release-lock command passed for the recorded I1A state. Physical-device I1B subsequently passed strict connected instrumentation, offline launch, and all approved manual foundation/TalkBack checks for its exact recorded state. I1D completed / PASS for its bounded Diagnostic PASS objective: its sanitized matrix and digest matched, but the emulator exited before ADB registration, API 36 boot was not established, and the connected test was not reached. Recovery PASS was not achieved. The larger native rewrite I1 remains blocked pending same-state emulator launch, connected testing, required TalkBack/accessibility, and complete exit evidence.
+I1E and the larger Android foundation I1 are complete / PASS only for their exact recorded state under the revised static-only CI policy. The exact static-only run and both configured final gates passed. All 20 protected Android behavior files were byte-identical to accepted physical-device I1B materialization, so connected-test, offline-launch, and TalkBack evidence carries by equivalence, not retest. Hosted-emulator acceptance remains withdrawn/superseded and was never retroactively passed.
+
+A physical phone is the sole connected-test, runtime-launch, and TalkBack verification surface. Do not run `connectedDebugAndroidTest` or begin device work without a freshly and explicitly approved phone gate. Any future protected Android behavior drift requires new approved physical-device evidence.
 
 Future local Android SDK paths belong in ignored `local.properties`. Future service values must use ignored local configuration or CI secrets and must never include a Supabase service-role key.
 
