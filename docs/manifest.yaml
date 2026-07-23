@@ -17,39 +17,37 @@ documentation:
     - docs/planning/active/pampan-native-rewrite.html
     - docs/planning/active/pampan-native-rewrite-roadmap.html
     - docs/planning/active/pampan-native-rewrite-i1c.html
-    - docs/planning/active/pampan-native-rewrite-i1d.html
   completed_documents:
     - docs/planning/completed/pampan-rewrite-spec.html
     - docs/planning/completed/pampan-rewrite-spec-i1-roadmap.html
     - docs/planning/completed/pampan-native-rewrite-i1a.html
     - docs/planning/completed/pampan-native-rewrite-i1b-r1.html
     - docs/planning/completed/pampan-native-rewrite-i1b.html
+    - docs/planning/completed/pampan-native-rewrite-i1d.html
 work:
   primary: PAMPAN-NATIVE-REWRITE
   active:
     - id: PAMPAN-NATIVE-REWRITE
       title: Android native rewrite
-      status: "I1D approved / not started; I1C remains BLOCKED after its failed single authorized run; I1A, I1B-R1, and physical-device I1B remain complete / PASS at recorded states; larger Android foundation I1 remains BLOCKED"
+      status: "I1D complete / PASS for Diagnostic PASS only; Recovery PASS not achieved; I1C remains BLOCKED; larger Android foundation I1 remains BLOCKED"
       spec: docs/planning/active/pampan-native-rewrite.html
       roadmap: docs/planning/active/pampan-native-rewrite-roadmap.html
-      increment: I1D
-      increment_plan: docs/planning/active/pampan-native-rewrite-i1d.html
-      increment_status: "APPROVED / not started; diagnosis-first auto-mode recovery probe with distinct Recovery PASS and Diagnostic PASS outcomes; larger I1 remains BLOCKED"
-      base_commit: d4c52928f8645701fdf1e77ea6083ec65e876282
-      base_tree: 84957ee3ec564c9e2fdaa8ff6b98e73934959d93
-      last_verified_commit: null
-      evidence: "I1C@d4c52928f8645701fdf1e77ea6083ec65e876282/tree-84957ee3ec564c9e2fdaa8ff6b98e73934959d93/run-29968898510: exactly one push-triggered run; completed FAILURE with matching head SHA; docs-and-security SUCCESS; Android job FAILURE; pinned toolchain, strict Gradle checks, dependency-lock no-drift, assembled audit, and APK scan succeeded before emulator-step failure; acceleration unavailable, non-privileged software fallback selected, emulator exited before ADB registration; API 36 boot, connected-test count, and activity/foundation assertion not established; implement_verify and implement_review FINAL FAIL. I1B, I1B-R1, and I1A remain PASS only at recorded states."
-      blocker: "I1D is approved but has no implementation or run evidence. I1C remains BLOCKED with actual-CI and emulator FAIL. Larger I1 remains BLOCKED pending genuine successful Android emulator evidence and a successful actual GitHub Actions run. I2-I9 remain inactive."
+      increment: I1
+      increment_plan: docs/planning/active/pampan-native-rewrite-roadmap.html
+      increment_status: "BLOCKED / pending verification; I1D Diagnostic PASS complete but Recovery PASS not achieved; same-state emulator launch, connected test, required TalkBack/accessibility, and complete exit evidence remain"
+      base_commit: dd7afd98a64043868afa82b789dded2d3b89005e
+      base_tree: 0d590b5ff9abe81f741e98d2b21475565b002036
+      last_verified_commit: dd7afd98a64043868afa82b789dded2d3b89005e
+      evidence: "I1D@dd7afd98a64043868afa82b789dded2d3b89005e/tree-0d590b5ff9abe81f741e98d2b21475565b002036/run-29978593901/diagnostic-1aa5a4fcb4ba7cb7497456549f56e3c58259b6d6b7b788df69c24256a4a23c76: complete / PASS for Diagnostic PASS only. One exact push run; docs/security and all pre-emulator Android gates passed; only emulator/UI-test step failed. Canonical matrix: kvm-device=present-inaccessible, acceleration-probe=fail, emulator-process=exited-nonzero, adb-registration=deadline, android-boot=process-exit, connected-test=not-reached. Digest matched exactly. implement_verify and implement_review PASS for Diagnostic PASS only. Recovery PASS not achieved."
+      blocker: "Larger I1 remains BLOCKED pending same-state emulator launch, connected testing, required TalkBack/accessibility, and complete exit evidence. I1D recovery was not achieved; its single run is exhausted. I2-I9 remain inactive and require fresh approval."
       relevant_paths: "SECURITY.md; docs/reference/public-repository-security.html; apps/android/ (only active native application); apps/ios/ (preserved dormant, no active gate); supabase/ and contracts/ (reserved only); .github/workflows/foundation.yml; scripts/check-android-toolchain.py; scripts/check-native-foundation.py; scripts/check-secrets.py; pam_pan/ (must remain unchanged from 0512f84)"
       standing_constraint: "Public repository: no secrets or sensitive data in source, docs, tests, fixtures, examples, CI configuration/output, artifacts, signing material, local configuration intended for commit, or Git history. Audit and report only redacted evidence."
-      last_completed_increment: I1B
+      last_completed_increment: I1D
       blocked_predecessor: docs/planning/active/pampan-native-rewrite-i1c.html
       blocked_predecessor_state: I1C@d4c52928f8645701fdf1e77ea6083ec65e876282/tree-84957ee3ec564c9e2fdaa8ff6b98e73934959d93/run-29968898510
-      approved_executable_scope: .github/workflows/foundation.yml
-      approved_history_remote_budget: "exactly two local commits (documentation first, workflow second), one non-force push of both together, and one push-triggered run at final head; no PR, rerun, dispatch, force-push, or second push"
-      last_verified_state: I1B@9c6fa158f0e463d5b45844e3cd72511548387c10/worktree-a8387e8235d92963a8705dd6124b68aa5e895f893672f06c2b92a052318c5654/index-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/untracked-dd1cad3463e6b1cd65f5ae7af052011bd7c53f216672bee40bf8f6aa58e3fbf5
-      completed_record: docs/planning/completed/pampan-native-rewrite-i1b.html
-      execution_base_tree: "Physical-device I1B passed without executable drift beyond the accepted I1B-R1 three-entry verification-metadata change; larger I1 remains blocked on emulator and successful actual-CI evidence"
+      last_verified_state: I1D@dd7afd98a64043868afa82b789dded2d3b89005e/tree-0d590b5ff9abe81f741e98d2b21475565b002036/run-29978593901/diagnostic-1aa5a4fcb4ba7cb7497456549f56e3c58259b6d6b7b788df69c24256a4a23c76
+      completed_record: docs/planning/completed/pampan-native-rewrite-i1d.html
+      execution_base_tree: "I1D changed only the approved Android workflow and passed its bounded diagnostic objective; Recovery PASS was not achieved and larger I1 remains blocked"
   completed:
     - id: PAMPAN-REWRITE-SPEC
       title: Repository reverse-engineering and rewrite specification
