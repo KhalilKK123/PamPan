@@ -63,13 +63,141 @@ jobs:
       - run: python3 ../../scripts/check-secrets.py --artifact-only --artifact app/build/outputs/apk/debug/app-debug.apk
       - name: Launch offline emulator and run UI tests
         run: |
-          echo no | avdmanager create avd --force --name pampan_ci --package "system-images;android-36;google_apis;x86_64" --device pixel_6
-          acceleration_mode=off
+          set +e
+
+          kvm_device=absent
+          acceleration_probe=fail
+          emulator_process=exited-nonzero
+          adb_registration=deadline
+          android_boot=process-exit
+          connected_test=not-reached
+          emulator_pid=
+          run_status=1
+
+          validate_diagnostic() {
+            case "$1=$2" in
+              kvm-device=present-accessible|kvm-device=present-inaccessible|kvm-device=absent)
+                return 0
+                ;;
+              acceleration-probe=pass|acceleration-probe=fail)
+                return 0
+                ;;
+              emulator-process=running|emulator-process=exited-zero|emulator-process=exited-nonzero|emulator-process=terminated-by-signal)
+                return 0
+                ;;
+              adb-registration=reached|adb-registration=deadline)
+                return 0
+                ;;
+              android-boot=complete|android-boot=deadline|android-boot=process-exit)
+                return 0
+                ;;
+              connected-test=pass|connected-test=fail|connected-test=not-reached)
+                return 0
+                ;;
+            esac
+            return 1
+          }
+
+          classify_emulator_process() {
+            if [ -z "$emulator_pid" ]; then
+              return
+            fi
+            if kill -0 "$emulator_pid" 2>/dev/null; then
+              emulator_process=running
+              return
+            fi
+
+            wait "$emulator_pid" > /dev/null 2>&1
+            emulator_status=$?
+            emulator_pid=
+            if [ "$emulator_status" -eq 0 ]; then
+              emulator_process=exited-zero
+            elif [ "$emulator_status" -gt 128 ]; then
+              emulator_process=terminated-by-signal
+            else
+              emulator_process=exited-nonzero
+            fi
+          }
+
+          cleanup() {
+            if [ -z "$emulator_pid" ]; then
+              return
+            fi
+            if kill -0 "$emulator_pid" 2>/dev/null; then
+              kill "$emulator_pid" > /dev/null 2>&1
+              for _ in {1..10}; do
+                if ! kill -0 "$emulator_pid" 2>/dev/null; then
+                  break
+                fi
+                sleep 1
+              done
+              if kill -0 "$emulator_pid" 2>/dev/null; then
+                kill -KILL "$emulator_pid" > /dev/null 2>&1
+              fi
+            fi
+            wait "$emulator_pid" > /dev/null 2>&1
+          }
+          trap cleanup EXIT
+
+          emit_diagnostics() {
+            validate_diagnostic kvm-device "$kvm_device" || return 1
+            validate_diagnostic acceleration-probe "$acceleration_probe" || return 1
+            validate_diagnostic emulator-process "$emulator_process" || return 1
+            validate_diagnostic adb-registration "$adb_registration" || return 1
+            validate_diagnostic android-boot "$android_boot" || return 1
+            validate_diagnostic connected-test "$connected_test" || return 1
+
+            diagnostic_hash=$(
+              printf 'kvm-device=%s\nacceleration-probe=%s\nemulator-process=%s\nadb-registration=%s\nandroid-boot=%s\nconnected-test=%s\n' \
+                "$kvm_device" \
+                "$acceleration_probe" \
+                "$emulator_process" \
+                "$adb_registration" \
+                "$android_boot" \
+                "$connected_test" \
+                | sha256sum \
+                | cut -d ' ' -f 1
+            )
+            if [[ ! "$diagnostic_hash" =~ ^[0-9a-f]{64}$ ]]; then
+              return 1
+            fi
+
+            echo "::notice title=I1D diagnostic::kvm-device=$kvm_device"
+            echo "::notice title=I1D diagnostic::acceleration-probe=$acceleration_probe"
+            echo "::notice title=I1D diagnostic::emulator-process=$emulator_process"
+            echo "::notice title=I1D diagnostic::adb-registration=$adb_registration"
+            echo "::notice title=I1D diagnostic::android-boot=$android_boot"
+            echo "::notice title=I1D diagnostic::connected-test=$connected_test"
+            echo "::notice title=I1D diagnostic::diagnostic-sha256=$diagnostic_hash"
+            {
+              echo "### I1D diagnostic matrix"
+              echo
+              echo '```text'
+              echo "kvm-device=$kvm_device"
+              echo "acceleration-probe=$acceleration_probe"
+              echo "emulator-process=$emulator_process"
+              echo "adb-registration=$adb_registration"
+              echo "android-boot=$android_boot"
+              echo "connected-test=$connected_test"
+              echo "diagnostic-sha256=$diagnostic_hash"
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          }
+
+          if [ -e /dev/kvm ]; then
+            if [ -r /dev/kvm ] && [ -w /dev/kvm ]; then
+              kvm_device=present-accessible
+            else
+              kvm_device=present-inaccessible
+            fi
+          fi
+
           if emulator -accel-check > "$RUNNER_TEMP/emulator-accel-check.log" 2>&1; then
-            acceleration_mode=on
-            echo "Emulator acceleration preflight: available."
-          else
-            echo "Emulator acceleration preflight: unavailable; using the software fallback."
+            acceleration_probe=pass
+          fi
+
+          if ! printf 'no\n' | avdmanager create avd --force --name pampan_ci --package "system-images;android-36;google_apis;x86_64" --device pixel_6 > "$RUNNER_TEMP/avdmanager.log" 2>&1; then
+            exit 1
           fi
           emulator_args=(
             -avd pampan_ci
@@ -77,41 +205,69 @@ jobs:
             -no-audio
             -no-boot-anim
             -gpu software
-            -accel "$acceleration_mode"
+            -accel auto
             -no-snapshot
           )
           nohup emulator "${emulator_args[@]}" > "$RUNNER_TEMP/emulator.log" 2>&1 &
           emulator_pid=$!
-          cleanup() {
-            adb emu kill > /dev/null 2>&1 || true
-            kill "$emulator_pid" > /dev/null 2>&1 || true
-          }
-          trap cleanup EXIT
-          if ! timeout 180 adb wait-for-device; then
-            if kill -0 "$emulator_pid" 2>/dev/null; then
-              echo "Emulator startup failed: no adb registration before the bounded deadline."
-            else
-              echo "Emulator startup failed: process exited before adb registration."
+
+          for _ in {1..36}; do
+            classify_emulator_process
+            if [ "$emulator_process" != running ]; then
+              android_boot=process-exit
+              break
             fi
-            exit 1
-          fi
-          boot_completed=false
-          for _ in {1..120}; do
-            if ! kill -0 "$emulator_pid" 2>/dev/null; then
-              echo "Emulator startup failed: process exited before Android boot completed."
-              exit 1
-            fi
-            boot_state=$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d "\r" || true)
-            if [ "$boot_state" = "1" ]; then
-              boot_completed=true
+            if timeout 10 adb get-state > /dev/null 2>&1; then
+              adb_registration=reached
               break
             fi
             sleep 5
           done
-          if [ "$boot_completed" != true ]; then
-            echo "Emulator startup failed: Android boot did not complete before the bounded deadline."
+
+          if [ "$adb_registration" = deadline ]; then
+            classify_emulator_process
+            if [ "$emulator_process" = running ]; then
+              android_boot=deadline
+            fi
+          else
+            for _ in {1..120}; do
+              classify_emulator_process
+              if [ "$emulator_process" != running ]; then
+                android_boot=process-exit
+                break
+              fi
+              boot_state=$(timeout 10 adb shell getprop sys.boot_completed 2>/dev/null | tr -d "\r")
+              if [ "$boot_state" = "1" ]; then
+                android_boot=complete
+                break
+              fi
+              sleep 5
+            done
+            if [ "$android_boot" != complete ]; then
+              classify_emulator_process
+              if [ "$emulator_process" = running ]; then
+                android_boot=deadline
+              fi
+            fi
+          fi
+
+          if [ "$android_boot" = complete ]; then
+            if timeout 10 adb shell svc wifi disable > /dev/null 2>&1 \
+              && timeout 10 adb shell svc data disable > /dev/null 2>&1; then
+              ./gradlew --offline --no-daemon --dependency-verification strict connectedDebugAndroidTest > "$RUNNER_TEMP/connected-test.log" 2>&1
+              connected_status=$?
+              if [ "$connected_status" -eq 0 ] \
+                && python3 -c 'from pathlib import Path; import xml.etree.ElementTree as ET; reports=list(Path("app/build/outputs/androidTest-results/connected/debug").rglob("TEST-*.xml")); suites=[ET.parse(path).getroot() for path in reports]; tests=sum(int(suite.attrib.get("tests", "0")) for suite in suites); failures=sum(int(suite.attrib.get("failures", "0")) for suite in suites); errors=sum(int(suite.attrib.get("errors", "0")) for suite in suites); skipped=sum(int(suite.attrib.get("skipped", "0")) for suite in suites); raise SystemExit(0 if reports and tests == 1 and failures == 0 and errors == 0 and skipped == 0 else 1)' > /dev/null 2>&1; then
+                connected_test=pass
+                run_status=0
+              else
+                connected_test=fail
+              fi
+            fi
+          fi
+
+          classify_emulator_process
+          if ! emit_diagnostics; then
             exit 1
           fi
-          adb shell svc wifi disable
-          adb shell svc data disable
-          ./gradlew --offline --no-daemon --dependency-verification strict connectedDebugAndroidTest
+          exit "$run_status"
