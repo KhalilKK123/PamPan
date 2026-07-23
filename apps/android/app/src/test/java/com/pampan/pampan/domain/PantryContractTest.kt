@@ -11,17 +11,22 @@ class PantryContractTest {
     fun quantityAndDateParsingPreserveExactApprovedValues() {
         assertEquals("0", PantryContract.parseQuantity("0").toPlainString())
         assertEquals("1.500", PantryContract.parseQuantity("1.500").toPlainString())
+        assertEquals("1", PantryContract.parseQuantity("01").toPlainString())
+        assertEquals("0.5", PantryContract.parseQuantity(".5").toPlainString())
+        assertEquals("1", PantryContract.parseQuantity("1.").toPlainString())
+        assertEquals("1000", PantryContract.parseQuantity("1e3").toPlainString())
+        assertEquals("1.25", PantryContract.parseQuantity("+1.25").toPlainString())
         assertEquals(LocalDate.of(2026, 8, 15), PantryContract.parseExpiryDate("2026-08-15"))
     }
 
     @Test
     fun invalidQuantityAndDateFormsAreRejected() {
-        listOf("-1", "01", ".5", "1.", "1e3", " one ").forEach { value ->
+        listOf("-1", "", " ", "1.2.3", "NaN", " one ").forEach { value ->
             assertThrows(IllegalArgumentException::class.java) {
                 PantryContract.parseQuantity(value)
             }
         }
-        listOf("2026-8-15", "2026-02-30", "not-a-date").forEach { value ->
+        listOf("2026-8-15", "2026-02-30", "0000-01-01", "+10000-01-01", "not-a-date").forEach { value ->
             assertThrows(IllegalArgumentException::class.java) {
                 PantryContract.parseExpiryDate(value)
             }

@@ -23,8 +23,13 @@ ANDROID_ASSET_PATH = (
 ROOT_KEYS = {"contractVersion", "categories", "items"}
 CATEGORY_KEYS = {"id", "name"}
 ITEM_KEYS = {"id", "name", "quantity", "unit", "expiryDate", "categoryId"}
-QUANTITY_PATTERN = re.compile(r"^(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$")
-DATE_PATTERN = re.compile(r"^[0-9]{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])$")
+QUANTITY_PATTERN = re.compile(
+    r"^\+?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
+)
+UNIT_PATTERN = re.compile(r"^(?:\S|\S(?:[\s\S]*\S)?)$")
+DATE_PATTERN = re.compile(
+    r"^(?!0000)[0-9]{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])$"
+)
 
 
 class DuplicateKeyError(ValueError):
@@ -117,7 +122,7 @@ def validate_document(document: Any) -> list[str]:
         quantity = item["quantity"]
         if not isinstance(quantity, str) or not QUANTITY_PATTERN.fullmatch(quantity):
             errors.append(
-                f"{location}.quantity must be a nonnegative canonical decimal string"
+                f"{location}.quantity must be a nonnegative decimal string"
             )
         else:
             try:
@@ -129,9 +134,7 @@ def validate_document(document: Any) -> list[str]:
         unit = item["unit"]
         if (
             not isinstance(unit, str)
-            or not unit
-            or not unit.strip()
-            or unit != unit.strip()
+            or not UNIT_PATTERN.fullmatch(unit)
         ):
             errors.append(f"{location}.unit must be a trimmed nonblank string")
 
@@ -184,7 +187,14 @@ def validate_schema_shape(schema: Any) -> list[str]:
     definitions = schema.get("$defs")
     if not isinstance(definitions, dict):
         return [*errors, "schema must define $defs"]
-    if set(definitions) != {"nonblank", "quantity", "expiryDate", "category", "item"}:
+    if set(definitions) != {
+        "nonblank",
+        "quantity",
+        "unit",
+        "expiryDate",
+        "category",
+        "item",
+    }:
         errors.append("schema definitions do not match the v1 contract")
         return errors
 
@@ -205,6 +215,8 @@ def validate_schema_shape(schema: Any) -> list[str]:
         errors.append("schema quantity pattern does not match validator semantics")
     if definitions.get("expiryDate", {}).get("pattern") != DATE_PATTERN.pattern:
         errors.append("schema expiry-date pattern does not match validator semantics")
+    if definitions.get("expiryDate", {}).get("format") != "date":
+        errors.append("schema expiry date must declare the date format")
     if definitions.get("nonblank") != {
         "type": "string",
         "minLength": 1,
@@ -213,6 +225,12 @@ def validate_schema_shape(schema: Any) -> list[str]:
         errors.append("schema nonblank definition does not match validator semantics")
     if definitions.get("quantity", {}).get("type") != "string":
         errors.append("schema quantity must be encoded as a string")
+    if definitions.get("unit") != {
+        "type": "string",
+        "minLength": 1,
+        "pattern": UNIT_PATTERN.pattern,
+    }:
+        errors.append("schema unit definition does not match validator semantics")
     if definitions.get("expiryDate", {}).get("type") != "string":
         errors.append("schema expiry date must be encoded as a string")
 
@@ -227,7 +245,7 @@ def validate_schema_shape(schema: Any) -> list[str]:
         "id": {"$ref": "#/$defs/nonblank"},
         "name": {"$ref": "#/$defs/nonblank"},
         "quantity": {"$ref": "#/$defs/quantity"},
-        "unit": {"$ref": "#/$defs/nonblank"},
+        "unit": {"$ref": "#/$defs/unit"},
         "expiryDate": {"$ref": "#/$defs/expiryDate"},
         "categoryId": {"$ref": "#/$defs/nonblank"},
     }
@@ -292,6 +310,20 @@ def run_negative_cases(canonical: dict[str, Any]) -> list[str]:
     return failures
 
 
+def run_decimal_acceptance_cases(canonical: dict[str, Any]) -> list[str]:
+    failures: list[str] = []
+    accepted_spellings = ("01", ".5", "1.", "1e3", "+1.25")
+    for spelling in accepted_spellings:
+        candidate = deepcopy(canonical)
+        candidate["items"][0]["quantity"] = spelling
+        errors = validate_document(candidate)
+        if errors:
+            failures.append(
+                f"approved decimal spelling unexpectedly failed: {spelling}"
+            )
+    return failures
+
+
 def main() -> int:
     failures: list[str] = []
     for path in (SCHEMA_PATH, EXAMPLE_PATH, ANDROID_ASSET_PATH):
@@ -315,6 +347,7 @@ def main() -> int:
     failures.extend(validate_schema_shape(schema))
     failures.extend(validate_document(canonical))
     failures.extend(run_negative_cases(canonical))
+    failures.extend(run_decimal_acceptance_cases(canonical))
 
     if len(canonical.get("items", [])) != 3:
         failures.append("canonical I2A fixture must contain exactly three items")
@@ -329,7 +362,10 @@ def main() -> int:
             print(f"- {failure}")
         return 1
 
-    print("Pantry contract v1 validation passed (canonical fixture and 18 negative cases).")
+    print(
+        "Pantry contract v1 validation passed "
+        "(canonical fixture, 18 negative cases, and 5 decimal spellings)."
+    )
     return 0
 
 

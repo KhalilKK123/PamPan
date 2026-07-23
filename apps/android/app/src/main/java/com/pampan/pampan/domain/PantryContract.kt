@@ -8,11 +8,14 @@ import java.time.format.DateTimeParseException
 object PantryContract {
     const val VERSION = "1"
 
-    private val quantityPattern = Regex("^(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$")
+    private val quantityPattern =
+        Regex("^\\+?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$")
+    private val expiryDatePattern =
+        Regex("^(?!0000)[0-9]{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])$")
 
     fun parseQuantity(value: String): BigDecimal {
         require(quantityPattern.matches(value)) {
-            "Quantity must be a nonnegative canonical decimal string."
+            "Quantity must be a nonnegative decimal string."
         }
         return value.toBigDecimal().also { quantity ->
             require(quantity.signum() >= 0) {
@@ -22,6 +25,9 @@ object PantryContract {
     }
 
     fun parseExpiryDate(value: String): LocalDate {
+        require(expiryDatePattern.matches(value)) {
+            "Expiry date must use exact four-digit ISO YYYY-MM-DD form."
+        }
         val parsed =
             try {
                 LocalDate.parse(value, DateTimeFormatter.ISO_LOCAL_DATE)

@@ -35,11 +35,17 @@
     },
     "quantity": {
       "type": "string",
-      "pattern": "^(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$"
+      "pattern": "^\\+?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$"
+    },
+    "unit": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?:\\S|\\S(?:[\\s\\S]*\\S)?)$"
     },
     "expiryDate": {
       "type": "string",
-      "pattern": "^[0-9]{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])$"
+      "format": "date",
+      "pattern": "^(?!0000)[0-9]{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])$"
     },
     "category": {
       "type": "object",
@@ -79,7 +85,7 @@
           "$ref": "#/$defs/quantity"
         },
         "unit": {
-          "$ref": "#/$defs/nonblank"
+          "$ref": "#/$defs/unit"
         },
         "expiryDate": {
           "$ref": "#/$defs/expiryDate"
