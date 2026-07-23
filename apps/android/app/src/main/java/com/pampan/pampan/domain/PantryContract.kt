@@ -1,6 +1,5 @@
 package com.pampan.pampan.domain
 
-import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -8,21 +7,10 @@ import java.time.format.DateTimeParseException
 object PantryContract {
     const val VERSION = "1"
 
-    private val quantityPattern =
-        Regex("^\\+?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$")
     private val expiryDatePattern =
         Regex("^(?!0000)[0-9]{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])$")
 
-    fun parseQuantity(value: String): BigDecimal {
-        require(quantityPattern.matches(value)) {
-            "Quantity must be a nonnegative decimal string."
-        }
-        return value.toBigDecimal().also { quantity ->
-            require(quantity.signum() >= 0) {
-                "Quantity must be nonnegative."
-            }
-        }
-    }
+    fun parseQuantity(value: String): PantryDecimal = PantryDecimal.parse(value)
 
     fun parseExpiryDate(value: String): LocalDate {
         require(expiryDatePattern.matches(value)) {
@@ -41,6 +29,23 @@ object PantryContract {
     }
 }
 
+@JvmInline
+value class PantryDecimal private constructor(
+    val value: String,
+) {
+    companion object {
+        private val pattern =
+            Regex("^\\+?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][+-]?[0-9]+)?$")
+
+        fun parse(value: String): PantryDecimal {
+            require(pattern.matches(value)) {
+                "Quantity must be a nonnegative decimal string."
+            }
+            return PantryDecimal(value)
+        }
+    }
+}
+
 data class PantryCategory(
     val id: String,
     val name: String,
@@ -54,7 +59,7 @@ data class PantryCategory(
 data class PantryItem(
     val id: String,
     val name: String,
-    val quantity: BigDecimal,
+    val quantity: PantryDecimal,
     val unit: String,
     val expiryDate: LocalDate,
     val categoryId: String,
@@ -62,7 +67,6 @@ data class PantryItem(
     init {
         require(id.isNotBlank()) { "Item ID must be nonblank." }
         require(name.isNotBlank()) { "Item name must be nonblank." }
-        require(quantity.signum() >= 0) { "Quantity must be nonnegative." }
         require(unit.isNotBlank() && unit == unit.trim()) {
             "Unit must be trimmed and nonblank."
         }
@@ -94,7 +98,7 @@ data class PantrySnapshot(
             PantryPreviewItem(
                 id = item.id,
                 name = item.name,
-                quantity = item.quantity.toPlainString(),
+                quantity = item.quantity.value,
                 unit = item.unit,
                 expiryDate = item.expiryDate.toString(),
                 categoryName = checkNotNull(categoriesById[item.categoryId]).name,

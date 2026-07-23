@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 from datetime import date
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal
 import json
 from pathlib import Path
 import re
@@ -124,12 +124,6 @@ def validate_document(document: Any) -> list[str]:
             errors.append(
                 f"{location}.quantity must be a nonnegative decimal string"
             )
-        else:
-            try:
-                if Decimal(quantity) < 0:
-                    errors.append(f"{location}.quantity must be nonnegative")
-            except InvalidOperation:
-                errors.append(f"{location}.quantity must be a decimal")
 
         unit = item["unit"]
         if (
@@ -312,7 +306,7 @@ def run_negative_cases(canonical: dict[str, Any]) -> list[str]:
 
 def run_decimal_acceptance_cases(canonical: dict[str, Any]) -> list[str]:
     failures: list[str] = []
-    accepted_spellings = ("01", ".5", "1.", "1e3", "+1.25")
+    accepted_spellings = ("01", ".5", "1.", "1e3", "+1.25", "1e9999999999")
     for spelling in accepted_spellings:
         candidate = deepcopy(canonical)
         candidate["items"][0]["quantity"] = spelling
@@ -364,7 +358,7 @@ def main() -> int:
 
     print(
         "Pantry contract v1 validation passed "
-        "(canonical fixture, 18 negative cases, and 5 decimal spellings)."
+        "(canonical fixture, 18 negative cases, and 6 decimal spellings)."
     )
     return 0
 

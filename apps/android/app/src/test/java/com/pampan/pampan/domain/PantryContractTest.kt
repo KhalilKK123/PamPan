@@ -3,19 +3,15 @@ package com.pampan.pampan.domain
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Test
-import java.math.BigDecimal
 import java.time.LocalDate
 
 class PantryContractTest {
     @Test
     fun quantityAndDateParsingPreserveExactApprovedValues() {
-        assertEquals("0", PantryContract.parseQuantity("0").toPlainString())
-        assertEquals("1.500", PantryContract.parseQuantity("1.500").toPlainString())
-        assertEquals("1", PantryContract.parseQuantity("01").toPlainString())
-        assertEquals("0.5", PantryContract.parseQuantity(".5").toPlainString())
-        assertEquals("1", PantryContract.parseQuantity("1.").toPlainString())
-        assertEquals("1000", PantryContract.parseQuantity("1e3").toPlainString())
-        assertEquals("1.25", PantryContract.parseQuantity("+1.25").toPlainString())
+        listOf("0", "1.500", "01", ".5", "1.", "1e3", "+1.25", "1e9999999999")
+            .forEach { value ->
+                assertEquals(value, PantryContract.parseQuantity(value).value)
+            }
         assertEquals(LocalDate.of(2026, 8, 15), PantryContract.parseExpiryDate("2026-08-15"))
     }
 
@@ -42,19 +38,16 @@ class PantryContractTest {
             PantryCategory(id = "category-produce", name = "")
         }
         assertThrows(IllegalArgumentException::class.java) {
-            item(id = " ", quantity = BigDecimal.ONE)
+            item(id = " ")
         }
         assertThrows(IllegalArgumentException::class.java) {
-            item(name = "\t", quantity = BigDecimal.ONE)
+            item(name = "\t")
         }
         assertThrows(IllegalArgumentException::class.java) {
-            item(quantity = BigDecimal("-0.1"))
+            item(unit = " kg")
         }
         assertThrows(IllegalArgumentException::class.java) {
-            item(quantity = BigDecimal.ONE, unit = " kg")
-        }
-        assertThrows(IllegalArgumentException::class.java) {
-            item(quantity = BigDecimal.ONE, categoryId = "")
+            item(categoryId = "")
         }
     }
 
@@ -64,14 +57,14 @@ class PantryContractTest {
         assertThrows(IllegalArgumentException::class.java) {
             PantrySnapshot(categories = listOf(category, category), items = emptyList())
         }
-        val pantryItem = item(quantity = BigDecimal.ZERO)
+        val pantryItem = item()
         assertThrows(IllegalArgumentException::class.java) {
             PantrySnapshot(categories = listOf(category), items = listOf(pantryItem, pantryItem))
         }
         assertThrows(IllegalArgumentException::class.java) {
             PantrySnapshot(
                 categories = listOf(category),
-                items = listOf(item(quantity = BigDecimal.ZERO, categoryId = "category-missing")),
+                items = listOf(item(categoryId = "category-missing")),
             )
         }
     }
@@ -88,14 +81,14 @@ class PantryContractTest {
                 item(
                     id = "item-one",
                     name = "One",
-                    quantity = BigDecimal("1.50"),
+                    quantity = PantryContract.parseQuantity("1.50"),
                     unit = "mL",
                     categoryId = "category-two",
                 ),
                 item(
                     id = "item-two",
                     name = "Two",
-                    quantity = BigDecimal.ZERO,
+                    quantity = PantryContract.parseQuantity("0"),
                     unit = "pieces",
                     categoryId = "category-one",
                 ),
@@ -112,7 +105,7 @@ class PantryContractTest {
     private fun item(
         id: String = "item",
         name: String = "Item",
-        quantity: BigDecimal,
+        quantity: PantryDecimal = PantryContract.parseQuantity("1"),
         unit: String = "kg",
         categoryId: String = "category-produce",
     ) = PantryItem(
